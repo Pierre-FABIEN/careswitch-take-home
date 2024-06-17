@@ -1,7 +1,12 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table';
+	import { onMount } from 'svelte';
 
 	let { data } = $props();
+
+	onMount(() => {
+		console.log(data, 'data');
+	});
 </script>
 
 <div class="mx-auto mt-8 max-w-3xl px-4 sm:px-6 lg:px-8">
