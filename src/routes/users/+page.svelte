@@ -21,6 +21,7 @@
 	import CalendarIcon from 'svelte-radix/Calendar.svelte';
 	import { cn } from '$lib/utils.js';
 	import { onMount } from 'svelte';
+	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
 
 	export let data: { form: SuperValidated<Infer<UserSchema>>; users: any[] };
 
@@ -72,57 +73,49 @@
 						<Form.Field name="name" {form}>
 							<Form.Control let:attrs>
 								<Form.Label>Name</Form.Label>
-								<Input {...attrs} bind:value={$formData.name} />
+								<Input {...attrs} type="text" bind:value={$formData.name} />
 							</Form.Control>
 							<Form.FieldErrors />
 						</Form.Field>
 					</div>
 					<div>
-						<label for="email">Email</label>
-						<input
-							bind:value={$formData.email}
-							type="email"
-							name="email"
-							required
-							class="mt-1 block w-full"
-						/>
-						{#if $errors.email}
-							<span class="text-red-500">{$errors.email}</span>
-						{/if}
+						<Form.Field name="email" {form}>
+							<Form.Control let:attrs>
+								<Form.Label>Email</Form.Label>
+								<Input {...attrs} type="email" bind:value={$formData.email} />
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
 					</div>
 
 					<div>
-						<label for="age">Age</label>
-						<input bind:value={$formData.age} type="number" name="age" class="mt-1 block w-full" />
-						{#if $errors.age}
-							<span class="text-red-500">{$errors.age}</span>
-						{/if}
+						<Form.Field name="integer" {form}>
+							<Form.Control let:attrs>
+								<Form.Label>Integer</Form.Label>
+								<Input {...attrs} type="number" bind:value={$formData.integer} />
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
 					</div>
 
 					<div>
-						<label for="isAdmin">Is Admin</label>
-						<input
-							bind:checked={$formData.isAdmin}
-							type="checkbox"
-							name="isAdmin"
-							class="mt-1 block"
-						/>
-						{#if $errors.isAdmin}
-							<span class="text-red-500">{$errors.isAdmin}</span>
-						{/if}
+						<Form.Field name="isAdmin" {form}>
+							<Form.Control let:attrs>
+								<Form.Label>Admin</Form.Label>
+								<Checkbox {...attrs} bind:checked={$formData.isAdmin} />
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
 					</div>
 
 					<div>
-						<label for="balance">Balance</label>
-						<input
-							bind:value={$formData.balance}
-							type="number"
-							name="balance"
-							class="mt-1 block w-full"
-						/>
-						{#if $errors.balance}
-							<span class="text-red-500">{$errors.balance}</span>
-						{/if}
+						<Form.Field name="floatval" {form}>
+							<Form.Control let:attrs>
+								<Form.Label>Float value</Form.Label>
+								<Input {...attrs} type="number" bind:value={$formData.floatval} />
+							</Form.Control>
+							<Form.FieldErrors />
+						</Form.Field>
 					</div>
 
 					<div>
@@ -172,27 +165,7 @@
 							<Form.FieldErrors />
 						</Form.Field>
 					</div>
-
-					<div>
-						<label for="role">Role</label>
-						<input
-							bind:value={$formData.role}
-							type="text"
-							name="role"
-							required
-							class="mt-1 block w-full"
-						/>
-						{#if $errors.role}
-							<span class="text-red-500">{$errors.role}</span>
-						{/if}
-					</div>
-
-					{#if $message}
-						<span>{$message}</span>
-					{/if}
-					<button type="submit" class="mt-4 rounded bg-blue-500 px-4 py-2 text-white"
-						>Create User</button
-					>
+					<Button type="submit" variant="outline">Submit</Button>
 				</form>
 			</Sheet.Content>
 		</Sheet.Root>
@@ -203,9 +176,9 @@
 				<Table.Row>
 					<Table.Head>Name</Table.Head>
 					<Table.Head>Email</Table.Head>
-					<Table.Head>Age</Table.Head>
-					<Table.Head>Role</Table.Head>
-					<Table.Head>Balance</Table.Head>
+					<Table.Head>Integer</Table.Head>
+					<Table.Head>Admin</Table.Head>
+					<Table.Head>Float value</Table.Head>
 					<Table.Head>Birthday</Table.Head>
 				</Table.Row>
 			</Table.Header>
@@ -215,9 +188,9 @@
 						<Table.Row>
 							<Table.Cell>{user.name}</Table.Cell>
 							<Table.Cell>{user.email}</Table.Cell>
-							<Table.Cell>{user.age}</Table.Cell>
-							<Table.Cell>{user.role}</Table.Cell>
-							<Table.Cell>{user.balance}</Table.Cell>
+							<Table.Cell>{user.integer}</Table.Cell>
+							<Table.Cell>{user.isAdmin}</Table.Cell>
+							<Table.Cell>{user.floatval}</Table.Cell>
 							<Table.Cell>{new Date(user.birthday).toLocaleDateString()}</Table.Cell>
 						</Table.Row>
 					{/each}
@@ -229,4 +202,7 @@
 			</Table.Body>
 		</Table.Root>
 	</div>
+	{#if $message}
+		<span>{$message}</span>
+	{/if}
 </div>

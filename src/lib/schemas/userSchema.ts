@@ -9,8 +9,7 @@ export const userSchema = z.object({
 	birthday: z
 		.string()
 		.datetime()
-		.refine((date) => date !== undefined, 'Please select a valid date.'),
-	role: z.string().min(1, 'Role is required')
+		.refine((date) => date !== undefined, 'Please select a valid date.')
 });
 
 export type UserSchema = typeof userSchema;
