@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-export const deleteUserSchema = z.object({
+export const userDeleteSchema = z.object({
 	userId: z.string()
 });
 
-export type DeleteUserSchema = z.infer<typeof deleteUserSchema>;
+export type UserDeleteSchema = z.infer<typeof userDeleteSchema>;

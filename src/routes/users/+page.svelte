@@ -9,6 +9,7 @@
 
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { userCreateSchema, type UserCreateSchema } from '$lib/schemas/userCreateSchema';
+	import { userDeleteSchema, type UserDeleteSchema } from '$lib/schemas/userDeleteSchema';
 
 	import * as Table from '$lib/components/ui/table';
 	import * as Form from '$ui/form';
@@ -25,10 +26,19 @@
 	import * as Alert from '$ui/alert';
 	import { onMount } from 'svelte';
 
-	export let data: { userCreateform: SuperValidated<Infer<UserCreateSchema>>; users: any[] };
+	export let data: {
+		userCreateform: SuperValidated<Infer<UserCreateSchema>>;
+		userDeleteform: SuperValidated<Infer<UserDeleteSchema>>;
+		users: any[];
+	};
 
 	const createUserForm = superForm(data.userCreateform, {
 		validators: zodClient(userCreateSchema),
+		dataType: 'json'
+	});
+
+	const deleteUserForm = superForm(data.userDeleteform, {
+		validators: zodClient(userDeleteSchema),
 		dataType: 'json'
 	});
 
@@ -38,6 +48,12 @@
 		message: createUserMessage,
 		validate: createUserValidate
 	} = createUserForm;
+
+	const {
+		form: deleteUserFormData,
+		enhance: deleteUserEnhance,
+		message: deleteUserMessage
+	} = deleteUserForm;
 
 	let isSheetOpen = false;
 
@@ -230,6 +246,17 @@
 							<Table.Cell>{user.isAdmin}</Table.Cell>
 							<Table.Cell>{user.floatval}</Table.Cell>
 							<Table.Cell>{new Date(user.birthday).toLocaleDateString()}</Table.Cell>
+							<Table.Cell>
+								<form
+									method="POST"
+									action="?/delete"
+									use:deleteUserEnhance
+									on:submit={() => setTimeout(reloadUsers, 1000)}
+								>
+									<input type="hidden" name="userId" value={user.id} />
+									<Button type="submit" variant="outline">Delete</Button>
+								</form>
+							</Table.Cell>
 						</Table.Row>
 					{/each}
 				{:else}
