@@ -44,6 +44,7 @@
 		"typescript": "^5.0.0",
 		"vaul-svelte": "^0.3.1",
 		"vite": "^5.0.3",
-		"zod": "^3.23.8"
+		"zod": "^3.23.8",
+		"svelte-radix": "^1.1.0"
 	}
 }

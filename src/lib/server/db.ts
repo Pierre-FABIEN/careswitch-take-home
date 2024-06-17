@@ -12,3 +12,22 @@ export async function getUsers() {
 		...user
 	}));
 }
+
+export async function createUser(data: {
+	name: string;
+	email: string;
+	integer: number;
+	isAdmin: boolean;
+	floatval: number;
+	birthday: Date;
+}) {
+	try {
+		const user = await prisma.user.create({
+			data
+		});
+		return user;
+	} catch (error) {
+		console.error('Error creating user:', error);
+		throw error;
+	}
+}
