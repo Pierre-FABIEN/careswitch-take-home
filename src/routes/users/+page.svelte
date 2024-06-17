@@ -22,6 +22,8 @@
 	import { cn } from '$lib/utils.js';
 	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
 
+	import * as Alert from '$ui/alert';
+
 	export let data: { form: SuperValidated<Infer<UserSchema>>; users: any[] };
 
 	const form = superForm(data.form, {
@@ -29,35 +31,65 @@
 		dataType: 'json'
 	});
 
-	const { form: formData, enhance, errors, message, validate } = form;
+	const {
+		form: createUserData,
+		enhance: createUserEnhance,
+		errors: createUserErrors,
+		message: createUserMessage,
+		validate: createUserValidate
+	} = form;
+
+	let isSheetOpen = false;
+
+	$: if ($createUserMessage === 'User created successfully') {
+		isSheetOpen = false;
+	}
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
 	});
 
-	let birthdayValue: DateValue | undefined = $formData.birthday
-		? parseDate($formData.birthday)
+	let birthdayValue: DateValue | undefined = $createUserData.birthday
+		? parseDate($createUserData.birthday)
 		: undefined;
 
-async function reloadUsers() {
-	try {
-		const response = await fetch('/users');
-		if (!response.ok) {
-			throw new Error(`Error: ${response.status} ${response.statusText}`);
+	// Reload users
+	async function reloadUsers() {
+		try {
+			const response = await fetch('/users');
+			if (!response.ok) {
+				throw new Error(`Error: ${response.status} ${response.statusText}`);
+			}
+			const newData = await response.json();
+			data.users = newData.users;
+		} catch (error) {
+			//console.error('Failed to reload users:', error);
 		}
-		const newData = await response.json();
-		data.users = newData.users;
-	} catch (error) {
-		//console.error('Failed to reload users:', error);
 	}
-}
+
+	// Animation
+	let showMessage = false;
+	let animationClass = 'animate-slideIn';
+
+	$: if ($createUserMessage) {
+		showMessage = true;
+		animationClass = 'animate-slideIn';
+		setTimeout(() => {
+			animationClass = 'animate-slideOut';
+			setTimeout(() => {
+				showMessage = false;
+			}, 500); // Durée de l'animation de sortie
+		}, 5000);
+	}
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
 	<div class="mb-4 flex justify-end">
-		<Sheet.Root>
+		<Sheet.Root open={isSheetOpen}>
 			<Sheet.Trigger asChild let:builder>
-				<Button builders={[builder]} variant="outline">Create</Button>
+				<Button builders={[builder]} variant="outline" on:click={() => (isSheetOpen = true)}>
+					Create
+				</Button>
 			</Sheet.Trigger>
 			<Sheet.Content side="right">
 				<Sheet.Header>
@@ -67,7 +99,7 @@ async function reloadUsers() {
 				</Sheet.Header>
 				<form
 					method="POST"
-					use:enhance
+					use:createUserEnhance
 					on:submit={() => setTimeout(reloadUsers, 1000)}
 					class="space-y-4"
 				>
@@ -75,7 +107,7 @@ async function reloadUsers() {
 						<Form.Field name="name" {form}>
 							<Form.Control let:attrs>
 								<Form.Label>Name</Form.Label>
-								<Input {...attrs} type="text" bind:value={$formData.name} />
+								<Input {...attrs} type="text" bind:value={$createUserData.name} />
 							</Form.Control>
 							<Form.FieldErrors />
 						</Form.Field>
@@ -84,7 +116,7 @@ async function reloadUsers() {
 						<Form.Field name="email" {form}>
 							<Form.Control let:attrs>
 								<Form.Label>Email</Form.Label>
-								<Input {...attrs} type="email" bind:value={$formData.email} />
+								<Input {...attrs} type="email" bind:value={$createUserData.email} />
 							</Form.Control>
 							<Form.FieldErrors />
 						</Form.Field>
@@ -94,7 +126,7 @@ async function reloadUsers() {
 						<Form.Field name="integer" {form}>
 							<Form.Control let:attrs>
 								<Form.Label>Integer</Form.Label>
-								<Input {...attrs} type="number" bind:value={$formData.integer} />
+								<Input {...attrs} type="number" bind:value={$createUserData.integer} />
 							</Form.Control>
 							<Form.FieldErrors />
 						</Form.Field>
@@ -104,7 +136,7 @@ async function reloadUsers() {
 						<Form.Field name="isAdmin" {form}>
 							<Form.Control let:attrs>
 								<Form.Label>Admin</Form.Label>
-								<Checkbox {...attrs} bind:checked={$formData.isAdmin} />
+								<Checkbox {...attrs} bind:checked={$createUserData.isAdmin} />
 							</Form.Control>
 							<Form.FieldErrors />
 						</Form.Field>
@@ -114,7 +146,7 @@ async function reloadUsers() {
 						<Form.Field name="floatval" {form}>
 							<Form.Control let:attrs>
 								<Form.Label>Float value</Form.Label>
-								<Input {...attrs} type="number" bind:value={$formData.floatval} />
+								<Input {...attrs} type="number" bind:value={$createUserData.floatval} />
 							</Form.Control>
 							<Form.FieldErrors />
 						</Form.Field>
@@ -152,16 +184,16 @@ async function reloadUsers() {
 											}}
 											onValueChange={(value) => {
 												if (value === undefined) {
-													$formData.birthday = '';
-													validate('birthday');
+													$createUserData.birthday = '';
+													createUserValidate('birthday');
 													return;
 												}
-												$formData.birthday = value.toDate('UTC').toISOString();
-												validate('birthday');
+												$createUserData.birthday = value.toDate('UTC').toISOString();
+												createUserValidate('birthday');
 											}}
 										/>
 									</Popover.Content>
-									<input hidden bind:value={$formData.birthday} name={attrs.name} />
+									<input hidden bind:value={$createUserData.birthday} name={attrs.name} />
 								</Popover.Root>
 							</Form.Control>
 							<Form.FieldErrors />
@@ -204,7 +236,16 @@ async function reloadUsers() {
 			</Table.Body>
 		</Table.Root>
 	</div>
-	{#if $message}
-		<span>{$message}</span>
+	{#if $createUserMessage}
+		<span>{$createUserMessage}</span>
 	{/if}
 </div>
+
+{#if showMessage}
+	<Alert.Root
+		class="fixed bottom-4 right-4 max-w-[200px] border border-green-400 bg-green-500 px-4 py-3 text-white {animationClass}"
+		role="alert"
+	>
+		<Alert.Description>{$createUserMessage}</Alert.Description>
+	</Alert.Root>
+{/if}
