@@ -119,6 +119,7 @@
 				</Sheet.Header>
 				<form
 					method="POST"
+					action="?/create"
 					use:createUserEnhance
 					on:submit={() => setTimeout(reloadUsers, 380)}
 					class="space-y-4"
