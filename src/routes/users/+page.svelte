@@ -23,10 +23,11 @@
 	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
 
 	import * as Alert from '$ui/alert';
+	import { onMount } from 'svelte';
 
-	export let data: { form: SuperValidated<Infer<UserSchema>>; users: any[] };
+	export let data: { userCreateform: SuperValidated<Infer<UserSchema>>; users: any[] };
 
-	const form = superForm(data.form, {
+	const form = superForm(data.userCreateform, {
 		validators: zodClient(userSchema),
 		dataType: 'json'
 	});
@@ -34,7 +35,6 @@
 	const {
 		form: createUserData,
 		enhance: createUserEnhance,
-		errors: createUserErrors,
 		message: createUserMessage,
 		validate: createUserValidate
 	} = form;
@@ -81,6 +81,10 @@
 			}, 500); // Durée de l'animation de sortie
 		}, 5000);
 	}
+
+	onMount(() => {
+		console.log(data);
+	});
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
@@ -100,7 +104,7 @@
 				<form
 					method="POST"
 					use:createUserEnhance
-					on:submit={() => setTimeout(reloadUsers, 1000)}
+					on:submit={() => setTimeout(reloadUsers, 380)}
 					class="space-y-4"
 				>
 					<div>
@@ -236,9 +240,6 @@
 			</Table.Body>
 		</Table.Root>
 	</div>
-	{#if $createUserMessage}
-		<span>{$createUserMessage}</span>
-	{/if}
 </div>
 
 {#if showMessage}

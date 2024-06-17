@@ -7,9 +7,9 @@ import { userSchema } from '$lib/schemas/userSchema';
 import { createUser, getUsers } from '$server/db';
 
 export const load: PageServerLoad = async () => {
-	const form = await superValidate(zod(userSchema));
+	const userCreateform = await superValidate(zod(userSchema));
 	const users = await getUsers();
-	return { form, users };
+	return { userCreateform, users };
 };
 
 export const actions: Actions = {
