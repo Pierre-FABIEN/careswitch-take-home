@@ -20,7 +20,6 @@
 	import { buttonVariants } from '$ui/button';
 	import CalendarIcon from 'svelte-radix/Calendar.svelte';
 	import { cn } from '$lib/utils.js';
-	import { onMount } from 'svelte';
 	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
 
 	export let data: { form: SuperValidated<Infer<UserSchema>>; users: any[] };
@@ -40,15 +39,18 @@
 		? parseDate($formData.birthday)
 		: undefined;
 
-	onMount(() => {
-		console.log('users', data);
-	});
-
-	async function reloadUsers() {
+async function reloadUsers() {
+	try {
 		const response = await fetch('/users');
+		if (!response.ok) {
+			throw new Error(`Error: ${response.status} ${response.statusText}`);
+		}
 		const newData = await response.json();
 		data.users = newData.users;
+	} catch (error) {
+		//console.error('Failed to reload users:', error);
 	}
+}
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
