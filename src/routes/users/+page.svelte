@@ -8,7 +8,7 @@
 	} from '@internationalized/date';
 
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { userSchema, type UserSchema } from '$lib/schemas/userSchema';
+	import { userCreateSchema, type UserCreateSchema } from '$lib/schemas/userCreateSchema';
 
 	import * as Table from '$lib/components/ui/table';
 	import * as Form from '$ui/form';
@@ -25,10 +25,10 @@
 	import * as Alert from '$ui/alert';
 	import { onMount } from 'svelte';
 
-	export let data: { userCreateform: SuperValidated<Infer<UserSchema>>; users: any[] };
+	export let data: { userCreateform: SuperValidated<Infer<UserCreateSchema>>; users: any[] };
 
-	const form = superForm(data.userCreateform, {
-		validators: zodClient(userSchema),
+	const createUserForm = superForm(data.userCreateform, {
+		validators: zodClient(userCreateSchema),
 		dataType: 'json'
 	});
 
@@ -37,7 +37,7 @@
 		enhance: createUserEnhance,
 		message: createUserMessage,
 		validate: createUserValidate
-	} = form;
+	} = createUserForm;
 
 	let isSheetOpen = false;
 
@@ -108,7 +108,7 @@
 					class="space-y-4"
 				>
 					<div>
-						<Form.Field name="name" {form}>
+						<Form.Field name="name" form={createUserForm}>
 							<Form.Control let:attrs>
 								<Form.Label>Name</Form.Label>
 								<Input {...attrs} type="text" bind:value={$createUserData.name} />
@@ -117,7 +117,7 @@
 						</Form.Field>
 					</div>
 					<div>
-						<Form.Field name="email" {form}>
+						<Form.Field name="email" form={createUserForm}>
 							<Form.Control let:attrs>
 								<Form.Label>Email</Form.Label>
 								<Input {...attrs} type="email" bind:value={$createUserData.email} />
@@ -127,7 +127,7 @@
 					</div>
 
 					<div>
-						<Form.Field name="integer" {form}>
+						<Form.Field name="integer" form={createUserForm}>
 							<Form.Control let:attrs>
 								<Form.Label>Integer</Form.Label>
 								<Input {...attrs} type="number" bind:value={$createUserData.integer} />
@@ -137,7 +137,7 @@
 					</div>
 
 					<div>
-						<Form.Field name="isAdmin" {form}>
+						<Form.Field name="isAdmin" form={createUserForm}>
 							<Form.Control let:attrs>
 								<Form.Label>Admin</Form.Label>
 								<Checkbox {...attrs} bind:checked={$createUserData.isAdmin} />
@@ -147,7 +147,7 @@
 					</div>
 
 					<div>
-						<Form.Field name="floatval" {form}>
+						<Form.Field name="floatval" form={createUserForm}>
 							<Form.Control let:attrs>
 								<Form.Label>Float value</Form.Label>
 								<Input {...attrs} type="number" bind:value={$createUserData.floatval} />
@@ -157,7 +157,7 @@
 					</div>
 
 					<div>
-						<Form.Field {form} name="birthday" class="flex flex-col">
+						<Form.Field form={createUserForm} name="birthday" class="flex flex-col">
 							<Form.Control let:attrs>
 								<Form.Label>Date of Birth</Form.Label>
 								<Popover.Root>

@@ -3,11 +3,11 @@ import { fail, type Actions } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { userSchema } from '$lib/schemas/userSchema';
+import { userCreateSchema } from '$lib/schemas/userCreateSchema';
 import { createUser, getUsers } from '$server/db';
 
 export const load: PageServerLoad = async () => {
-	const userCreateform = await superValidate(zod(userSchema));
+	const userCreateform = await superValidate(zod(userCreateSchema));
 	const users = await getUsers();
 	return { userCreateform, users };
 };
@@ -15,7 +15,7 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	default: async ({ request }) => {
 		const formData = await request.formData();
-		const form = await superValidate(formData, zod(userSchema));
+		const form = await superValidate(formData, zod(userCreateSchema));
 
 		if (!form.valid) return fail(400, { form });
 
