@@ -14,7 +14,7 @@ model User {
   integer    Int
   isAdmin    Boolean          @default(false)
   floatval   Float
-  birthday   DateTime
+  birthday   String
   workspaces UserWorkspaces[]
 }
 

@@ -150,7 +150,7 @@
 											}}
 											onValueChange={(value) => {
 												if (value === undefined) {
-													$formData.birthday = undefined;
+													$formData.birthday = '';
 													validate('birthday');
 													return;
 												}

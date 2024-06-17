@@ -15,7 +15,7 @@ async function seed() {
 					integer: 25,
 					isAdmin: true,
 					floatval: 100.5,
-					birthday: new Date('1995-12-17')
+					birthday: 'Sun Dec 17 1995 01:00:00 GMT+0100'
 				}
 			});
 
@@ -26,7 +26,7 @@ async function seed() {
 					integer: 30,
 					isAdmin: false,
 					floatval: 200.75,
-					birthday: new Date('1990-05-23')
+					birthday: 'Wed May 23 1990 02:00:00 GMT+0200'
 				}
 			});
 

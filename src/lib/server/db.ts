@@ -19,7 +19,7 @@ export async function createUser(data: {
 	integer: number;
 	isAdmin: boolean;
 	floatval: number;
-	birthday: Date;
+	birthday: string;
 }) {
 	try {
 		const user = await prisma.user.create({
