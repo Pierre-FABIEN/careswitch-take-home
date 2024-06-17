@@ -49,11 +49,60 @@
 		validate: createUserValidate
 	} = createUserForm;
 
-	const {
-		form: deleteUserFormData,
-		enhance: deleteUserEnhance,
-		message: deleteUserMessage
-	} = deleteUserForm;
+	const { enhance: deleteUserEnhance } = deleteUserForm;
+
+	// const deleteUserEnhance = (element) => {
+	// 	element.addEventListener('submit', async (event) => {
+	// 		event.preventDefault();
+
+	// 		console.log('deleteUserEnhance called'); // Débogage
+
+	// 		const formData = new FormData(element);
+	// 		console.log('Form Data:', Object.fromEntries(formData)); // Vérifiez les données du formulaire
+
+	// 		const action = element.action;
+	// 		const response = await fetch(action, {
+	// 			method: 'POST',
+	// 			body: formData
+	// 		});
+
+	// 		console.log('Response status:', response.status); // Vérifiez le statut de la réponse
+
+	// 		if (!response.ok) {
+	// 			console.error('Failed to submit form', response.statusText); // Erreur de soumission
+	// 			return;
+	// 		}
+
+	// 		try {
+	// 			const result = await response.json();
+	// 			console.log('Response result:', result); // Vérifiez le résultat de la réponse
+
+	// 			// Inspectez le contenu de result.data avant de l'analyser
+	// 			console.log('Raw Data:', result.data);
+
+	// 			// Analysez la chaîne JSON contenue dans la propriété `data`
+	// 			const parsedData = JSON.parse(result.data);
+	// 			console.log('Parsed Data:', parsedData);
+
+	// 			// Vérifiez si la réponse contient un message de succès
+	// 			if (
+	// 				parsedData &&
+	// 				Array.isArray(parsedData) &&
+	// 				parsedData.includes('User deleted successfully')
+	// 			) {
+	// 				// Rechargez les utilisateurs après la suppression
+	// 				await reloadUsers();
+	// 			} else {
+	// 				console.error('Unexpected parsed data format:', parsedData);
+	// 			}
+	// 		} catch (error) {
+	// 			console.error('Error parsing JSON response:', error);
+	// 		}
+	// 	});
+
+	// 	// Retourner un objet vide pour satisfaire les attentes de Svelte
+	// 	return {};
+	// };
 
 	let isSheetOpen = false;
 
@@ -101,6 +150,38 @@
 	onMount(() => {
 		console.log(data);
 	});
+
+	const handleDeleteUserEnhance = (element: HTMLFormElement) => {
+		element.addEventListener('submit', async (event) => {
+			event.preventDefault();
+
+			const formData = new FormData(element);
+			console.log('Form Data:', Object.fromEntries(formData)); // Vérifiez les données du formulaire
+
+			const action = element.action;
+			const response = await fetch(action, {
+				method: 'POST',
+				body: formData
+			});
+
+			if (!response.ok) {
+				console.error('Failed to submit form', response.statusText); // Erreur de soumission
+				return;
+			}
+
+			const result = await response.json();
+			console.log('Response result:', result); // Vérifiez le résultat de la réponse
+
+			try {
+				const parsedData = JSON.parse(result.data);
+				if (parsedData.includes('User deleted successfully')) {
+					await reloadUsers();
+				}
+			} catch (error) {
+				console.error('Error parsing JSON response:', error);
+			}
+		});
+	};
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
@@ -248,12 +329,7 @@
 							<Table.Cell>{user.floatval}</Table.Cell>
 							<Table.Cell>{new Date(user.birthday).toLocaleDateString()}</Table.Cell>
 							<Table.Cell>
-								<form
-									method="POST"
-									action="?/delete"
-									use:deleteUserEnhance
-									on:submit={() => setTimeout(reloadUsers, 1000)}
-								>
+								<form method="POST" action="?/delete" use:handleDeleteUserEnhance>
 									<input type="hidden" name="userId" value={user.id} />
 									<Button type="submit" variant="outline">Delete</Button>
 								</form>

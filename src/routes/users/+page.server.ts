@@ -31,6 +31,8 @@ export const actions: Actions = {
 		}
 	},
 	delete: async ({ request }) => {
+		console.log(request, 'request');
+
 		const formData = await request.formData();
 		const form = await superValidate(formData, zod(userDeleteSchema));
 

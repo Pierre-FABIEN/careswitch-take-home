@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const userDeleteSchema = z.object({
-	userId: z.string()
+	userId: z.string().min(1, 'User ID is required')
 });
 
-export type UserDeleteSchema = z.infer<typeof userDeleteSchema>;
+export type UserDeleteSchema = typeof userDeleteSchema;
