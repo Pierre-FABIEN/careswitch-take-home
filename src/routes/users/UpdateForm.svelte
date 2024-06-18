@@ -47,6 +47,9 @@
 		birthday: ''
 	});
 
+	// Link userData to updateUserData
+	$: updateUserData = userData;
+
 	// Function to update user details
 	const updateUserDetails = () => {
 		userData.set({
@@ -77,6 +80,8 @@
 	$: if (user) {
 		updateUserDetails();
 	}
+
+	$: console.log('userData:', $userData, 'updateUserData', $updateUserData);
 </script>
 
 <Sheet.Root bind:open={$isSheetOpen}>
