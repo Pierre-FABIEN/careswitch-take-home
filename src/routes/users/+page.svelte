@@ -75,8 +75,6 @@
 	onMount(() => {
 		console.log(data);
 	});
-
-	$: console.log($deleteUserMessage);
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
