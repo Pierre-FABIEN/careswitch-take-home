@@ -17,91 +17,91 @@
 		parseDate
 	} from '@internationalized/date';
 
-	export let createUserMessage: any;
-	export let createUserData: any;
-	export let createUserValidate: any;
-	export let createUserEnhance: any;
-	export let createUserForm: any;
+	export let updateUserMessage: any;
+	export let updateUserData: any;
+	export let updateUserValidate: any;
+	export let updateUserEnhance: any;
+	export let updateUserForm: any;
 	let isSheetOpen = false;
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
 	});
 
-	let birthdayValue: DateValue | undefined = $createUserData.birthday
-		? parseDate($createUserData.birthday)
+	let birthdayValue: DateValue | undefined = $updateUserData.birthday
+		? parseDate($updateUserData.birthday)
 		: undefined;
 
-	$: if ($createUserMessage === 'User created successfully') {
+	$: if ($updateUserMessage === 'User updated successfully') {
 		isSheetOpen = false;
 		birthdayValue = undefined; // Reset the date value
-		$createUserData.birthday = ''; // Clear the form data
+		$updateUserData.birthday = ''; // Clear the form data
 	}
 </script>
 
 <Sheet.Root open={isSheetOpen}>
 	<Sheet.Trigger asChild let:builder>
 		<Button builders={[builder]} variant="outline" on:click={() => (isSheetOpen = true)}>
-			Create
+			update
 		</Button>
 	</Sheet.Trigger>
 	<Sheet.Content side="right">
 		<Sheet.Header>
-			<Sheet.Title>Create a new user</Sheet.Title>
-			<Sheet.Description>Create a new user here. Click save when you're done.</Sheet.Description>
+			<Sheet.Title>update a new user</Sheet.Title>
+			<Sheet.Description>update a new user here. Click save when you're done.</Sheet.Description>
 		</Sheet.Header>
-		<form method="POST" action="?/create" use:createUserEnhance class="space-y-4">
+		<form method="POST" action="?/update" use:updateUserEnhance class="space-y-4">
 			<div>
-				<Form.Field name="name" form={createUserForm}>
+				<Form.Field name="name" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Name</Form.Label>
-						<Input {...attrs} type="text" bind:value={$createUserData.name} />
+						<Input {...attrs} type="text" bind:value={$updateUserData.name} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 			<div>
-				<Form.Field name="email" form={createUserForm}>
+				<Form.Field name="email" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Email</Form.Label>
-						<Input {...attrs} type="email" bind:value={$createUserData.email} />
+						<Input {...attrs} type="email" bind:value={$updateUserData.email} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 
 			<div>
-				<Form.Field name="integer" form={createUserForm}>
+				<Form.Field name="integer" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Integer</Form.Label>
-						<Input {...attrs} type="number" bind:value={$createUserData.integer} />
+						<Input {...attrs} type="number" bind:value={$updateUserData.integer} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 
 			<div>
-				<Form.Field name="isAdmin" form={createUserForm}>
+				<Form.Field name="isAdmin" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Admin</Form.Label>
-						<Checkbox {...attrs} bind:checked={$createUserData.isAdmin} />
+						<Checkbox {...attrs} bind:checked={$updateUserData.isAdmin} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 
 			<div>
-				<Form.Field name="floatval" form={createUserForm}>
+				<Form.Field name="floatval" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Float value</Form.Label>
-						<Input {...attrs} type="number" bind:value={$createUserData.floatval} />
+						<Input {...attrs} type="number" bind:value={$updateUserData.floatval} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 
 			<div>
-				<Form.Field form={createUserForm} name="birthday" class="flex flex-col">
+				<Form.Field form={updateUserForm} name="birthday" class="flex flex-col">
 					<Form.Control let:attrs>
 						<Form.Label>Date of Birth</Form.Label>
 						<Popover.Root>
@@ -132,16 +132,16 @@
 									}}
 									onValueChange={(value) => {
 										if (value === undefined) {
-											$createUserData.birthday = '';
-											createUserValidate('birthday');
+											$updateUserData.birthday = '';
+											updateUserValidate('birthday');
 											return;
 										}
-										$createUserData.birthday = value.toDate('UTC').toISOString();
-										createUserValidate('birthday');
+										$updateUserData.birthday = value.toDate('UTC').toISOString();
+										updateUserValidate('birthday');
 									}}
 								/>
 							</Popover.Content>
-							<input hidden bind:value={$createUserData.birthday} name={attrs.name} />
+							<input hidden bind:value={$updateUserData.birthday} name={attrs.name} />
 						</Popover.Root>
 					</Form.Control>
 					<Form.FieldErrors />

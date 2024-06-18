@@ -1,20 +1,20 @@
 <script lang="ts">
 	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
-
 	import { zodClient } from 'sveltekit-superforms/adapters';
+
 	import { userCreateSchema, type UserCreateSchema } from '$lib/schemas/userCreateSchema';
 	import { userDeleteSchema, type UserDeleteSchema } from '$lib/schemas/userDeleteSchema';
 	import { userUpdateSchema, type UserUpdateSchema } from '$lib/schemas/userUpdateSchema';
 
-	import * as Table from '$lib/components/ui/table';
+	import CreateForm from './CreateForm.svelte';
 
+	import * as Table from '$ui/table';
+	import * as Alert from '$ui/alert';
 	import { Button } from '$ui/button';
-
 	import TrashIcon from 'svelte-radix/Trash.svelte';
 
-	import * as Alert from '$ui/alert';
 	import { onMount } from 'svelte';
-	import CreateForm from './CreateForm.svelte';
+	import UpdateForm from './UpdateForm.svelte';
 
 	export let data: {
 		userCreateform: SuperValidated<Infer<UserCreateSchema>>;
@@ -108,6 +108,15 @@
 							<Table.Cell>{user.isAdmin}</Table.Cell>
 							<Table.Cell>{user.floatval}</Table.Cell>
 							<Table.Cell>{new Date(user.birthday).toLocaleDateString()}</Table.Cell>
+							<Table.Cell>
+								<UpdateForm
+									{updateUserMessage}
+									{updateUserData}
+									{updateUserValidate}
+									{updateUserEnhance}
+									{updateUserForm}
+								/>
+							</Table.Cell>
 							<Table.Cell>
 								<form method="POST" action="?/delete" use:deleteUserEnhance>
 									<input type="hidden" name="userId" value={user.id} />
