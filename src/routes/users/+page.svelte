@@ -10,6 +10,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { userCreateSchema, type UserCreateSchema } from '$lib/schemas/userCreateSchema';
 	import { userDeleteSchema, type UserDeleteSchema } from '$lib/schemas/userDeleteSchema';
+	import { userUpdateSchema, type UserUpdateSchema } from '$lib/schemas/userUpdateSchema';
 
 	import * as Table from '$lib/components/ui/table';
 	import * as Form from '$ui/form';
@@ -30,11 +31,17 @@
 	export let data: {
 		userCreateform: SuperValidated<Infer<UserCreateSchema>>;
 		userDeleteform: SuperValidated<Infer<UserDeleteSchema>>;
+		userUpdateSchema: SuperValidated<Infer<UserUpdateSchema>>;
 		users: any[];
 	};
 
 	const createUserForm = superForm(data.userCreateform, {
 		validators: zodClient(userCreateSchema),
+		dataType: 'json'
+	});
+
+	const updateUserForm = superForm(data.userCreateform, {
+		validators: zodClient(userUpdateSchema),
 		dataType: 'json'
 	});
 
@@ -48,6 +55,13 @@
 		message: createUserMessage,
 		validate: createUserValidate
 	} = createUserForm;
+
+	const {
+		form: updateUserData,
+		enhance: updateUserEnhance,
+		message: updateUserMessage,
+		validate: updateUserValidate
+	} = updateUserForm;
 
 	const { enhance: deleteUserEnhance } = deleteUserForm;
 
@@ -79,6 +93,10 @@
 			}, 500); // Durée de l'animation de sortie
 		}, 5000);
 	}
+
+	onMount(() => {
+		console.log(data);
+	});
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
