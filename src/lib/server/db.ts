@@ -43,18 +43,20 @@ export async function deleteUser(userId: string) {
 	}
 }
 
-export async function updateUser(data: {
-	id: string;
-	name: string;
-	email: string;
-	integer: number;
-	isAdmin: boolean;
-	floatval: number;
-	birthday: string;
-}) {
+export async function updateUser(
+	id: string,
+	data: {
+		name: string;
+		email: string;
+		integer: number;
+		isAdmin: boolean;
+		floatval: number;
+		birthday: string;
+	}
+) {
 	try {
 		const user = await prisma.user.update({
-			where: { id: data.id },
+			where: { id },
 			data: {
 				name: data.name,
 				email: data.email,

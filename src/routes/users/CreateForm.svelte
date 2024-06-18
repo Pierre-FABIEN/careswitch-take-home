@@ -94,7 +94,7 @@
 				<Form.Field name="floatval" form={createUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Float value</Form.Label>
-						<Input {...attrs} type="number" bind:value={$createUserData.floatval} />
+						<Input {...attrs} type="number" step="any" bind:value={$createUserData.floatval} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>

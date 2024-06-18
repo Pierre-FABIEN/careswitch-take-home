@@ -51,14 +51,14 @@ export const actions: Actions = {
 	},
 	update: async ({ request }) => {
 		const formData = await request.formData();
-		console.log(formData, 'formData');
+		const id = formData.get('userId');
 
 		const form = await superValidate(formData, zod(userUpdateSchema));
 
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			await updateUser(form.data);
+			await updateUser(id, form.data);
 
 			return message(form, 'User updated successfully');
 		} catch (error) {

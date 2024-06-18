@@ -50,7 +50,7 @@
 	});
 
 	// Mise à jour des données utilisateur lorsque le message de mise à jour change
-	$: if (updateUserMessage === 'User updated successfully') {
+	$: if ($updateUserMessage === 'User updated successfully') {
 		isSheetOpen = false;
 		birthdayValue = undefined; // Reset the date value
 		$updateUserData.birthday = ''; // Clear the form data
@@ -58,6 +58,8 @@
 
 	// Mettre à jour les détails de l'utilisateur lorsque l'utilisateur change
 	$: if (user) {
+		console.log(user);
+
 		updateUserDetails();
 	}
 </script>
@@ -74,6 +76,7 @@
 			<Sheet.Description>Update user details here. Click save when you're done.</Sheet.Description>
 		</Sheet.Header>
 		<form method="POST" action="?/update" use:updateUserEnhance class="space-y-4">
+			<input type="hidden" name="userId" value={user.id} />
 			<div>
 				<Form.Field name="name" form={updateUserForm}>
 					<Form.Control let:attrs>
@@ -117,7 +120,7 @@
 				<Form.Field name="floatval" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Float value</Form.Label>
-						<Input {...attrs} type="number" bind:value={$updateUserData.floatval} />
+						<Input {...attrs} type="number" step="any" bind:value={$updateUserData.floatval} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
