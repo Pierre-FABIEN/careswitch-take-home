@@ -37,6 +37,7 @@
 
 	const deleteUserForm = superForm(data.userDeleteform, {
 		validators: zodClient(userDeleteSchema),
+		dataType: 'json',
 		id: 'deleteUserForm'
 	});
 

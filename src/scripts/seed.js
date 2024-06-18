@@ -11,7 +11,7 @@ async function seed() {
 				integer: 25,
 				isAdmin: true,
 				floatval: 100.5,
-				birthday: 'Sun Dec 17 1995 01:00:00 GMT+0100'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Bob',
@@ -19,7 +19,7 @@ async function seed() {
 				integer: 30,
 				isAdmin: false,
 				floatval: 200.75,
-				birthday: 'Wed May 23 1990 02:00:00 GMT+0200'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			// Ajoutez 13 autres utilisateurs ici
 			{
@@ -28,7 +28,7 @@ async function seed() {
 				integer: 28,
 				isAdmin: false,
 				floatval: 150.25,
-				birthday: 'Thu Jun 15 1992 03:00:00 GMT+0300'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'David',
@@ -36,7 +36,7 @@ async function seed() {
 				integer: 35,
 				isAdmin: false,
 				floatval: 300.4,
-				birthday: 'Fri Apr 21 1989 04:00:00 GMT+0400'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Eve',
@@ -44,7 +44,7 @@ async function seed() {
 				integer: 22,
 				isAdmin: true,
 				floatval: 120.75,
-				birthday: 'Sat Jul 20 1996 05:00:00 GMT+0500'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Frank',
@@ -52,7 +52,7 @@ async function seed() {
 				integer: 40,
 				isAdmin: false,
 				floatval: 350.5,
-				birthday: 'Sun Aug 18 1985 06:00:00 GMT+0600'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Grace',
@@ -60,7 +60,7 @@ async function seed() {
 				integer: 32,
 				isAdmin: true,
 				floatval: 400.65,
-				birthday: 'Mon Sep 17 1988 07:00:00 GMT+0700'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Hank',
@@ -68,7 +68,7 @@ async function seed() {
 				integer: 29,
 				isAdmin: false,
 				floatval: 250.8,
-				birthday: 'Tue Oct 16 1991 08:00:00 GMT+0800'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Ivy',
@@ -76,7 +76,7 @@ async function seed() {
 				integer: 26,
 				isAdmin: false,
 				floatval: 130.95,
-				birthday: 'Wed Nov 15 1993 09:00:00 GMT+0900'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Jack',
@@ -84,7 +84,7 @@ async function seed() {
 				integer: 38,
 				isAdmin: true,
 				floatval: 500.1,
-				birthday: 'Thu Dec 14 1986 10:00:00 GMT+1000'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Kim',
@@ -92,7 +92,7 @@ async function seed() {
 				integer: 27,
 				isAdmin: false,
 				floatval: 220.25,
-				birthday: 'Fri Jan 13 1994 11:00:00 GMT+1100'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Liam',
@@ -100,7 +100,7 @@ async function seed() {
 				integer: 24,
 				isAdmin: false,
 				floatval: 330.4,
-				birthday: 'Sat Feb 12 1997 12:00:00 GMT+1200'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Mia',
@@ -108,7 +108,7 @@ async function seed() {
 				integer: 31,
 				isAdmin: true,
 				floatval: 140.55,
-				birthday: 'Sun Mar 11 1993 13:00:00 GMT+1300'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Noah',
@@ -116,7 +116,7 @@ async function seed() {
 				integer: 36,
 				isAdmin: false,
 				floatval: 410.7,
-				birthday: 'Mon Apr 10 1987 14:00:00 GMT+1400'
+				birthday: '1995-12-17T01:00:00+01:00'
 			},
 			{
 				name: 'Olivia',
@@ -124,7 +124,7 @@ async function seed() {
 				integer: 33,
 				isAdmin: true,
 				floatval: 160.85,
-				birthday: 'Tue May 09 1990 15:00:00 GMT+1500'
+				birthday: '1995-12-17T01:00:00+01:00'
 			}
 		];
 

@@ -6,7 +6,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { userCreateSchema } from '$lib/schemas/userCreateSchema';
 import { userDeleteSchema } from '$lib/schemas/userDeleteSchema';
 import { userUpdateSchema } from '$lib/schemas/userUpdateSchema';
-import { createUser, deleteUser, getUsers } from '$server/db';
+import { createUser, deleteUser, getUsers, updateUser } from '$server/db';
 
 export const load: PageServerLoad = async () => {
 	const userCreateform = await superValidate(zod(userCreateSchema));
@@ -33,6 +33,8 @@ export const actions: Actions = {
 		}
 	},
 	delete: async ({ request }) => {
+		console.log(request, 'request');
+
 		const formData = await request.formData();
 		const id = formData.get('userId');
 
@@ -50,6 +52,23 @@ export const actions: Actions = {
 		} catch (error) {
 			console.error('Error deleting user:', error);
 			return fail(500, { form, error: 'An error occurred while deleting the user' });
+		}
+	},
+	update: async ({ request }) => {
+		const formData = await request.formData();
+		console.log(formData, 'formData');
+
+		const form = await superValidate(formData, zod(userUpdateSchema));
+
+		if (!form.valid) return fail(400, { form });
+
+		try {
+			await updateUser(form.data);
+
+			return message(form, 'User updated successfully');
+		} catch (error) {
+			console.error('Error updating user:', error);
+			return fail(500, { form, error: 'An error occurred while updating the user' });
 		}
 	}
 };

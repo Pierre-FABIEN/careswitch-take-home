@@ -42,3 +42,31 @@ export async function deleteUser(userId: string) {
 		throw new Error('Could not delete user');
 	}
 }
+
+export async function updateUser(data: {
+	id: string;
+	name: string;
+	email: string;
+	integer: number;
+	isAdmin: boolean;
+	floatval: number;
+	birthday: string;
+}) {
+	try {
+		const user = await prisma.user.update({
+			where: { id: data.id },
+			data: {
+				name: data.name,
+				email: data.email,
+				integer: data.integer,
+				isAdmin: data.isAdmin,
+				floatval: data.floatval,
+				birthday: data.birthday
+			}
+		});
+		return user;
+	} catch (error) {
+		console.error('Error updating user:', error);
+		throw error;
+	}
+}

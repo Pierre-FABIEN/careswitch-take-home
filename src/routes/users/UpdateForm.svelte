@@ -6,6 +6,7 @@
 	import { Calendar } from '$ui/calendar';
 	import { buttonVariants } from '$ui/button';
 	import CalendarIcon from 'svelte-radix/Calendar.svelte';
+	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import { cn } from '$lib/utils.js';
 	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
 	import { Button } from '$ui/button';
@@ -64,7 +65,7 @@
 <Sheet.Root open={isSheetOpen}>
 	<Sheet.Trigger asChild let:builder>
 		<Button builders={[builder]} variant="outline" on:click={() => (isSheetOpen = true)}>
-			update
+			<PencilIcon />
 		</Button>
 	</Sheet.Trigger>
 	<Sheet.Content side="right">

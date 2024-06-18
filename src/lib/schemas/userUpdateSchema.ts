@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 export const userUpdateSchema = z.object({
+	userId: z.any(),
 	name: z.string().min(3, 'Name must contain at least 3 characters'),
 	email: z.string().email('Invalid email'),
 	integer: z.number(),
