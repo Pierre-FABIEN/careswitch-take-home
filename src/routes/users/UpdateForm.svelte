@@ -9,6 +9,7 @@
 	import { cn } from '$lib/utils.js';
 	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
 	import { Button } from '$ui/button';
+	import { writable } from 'svelte/store';
 
 	import {
 		DateFormatter,
@@ -25,6 +26,17 @@
 	export let updateUserEnhance: any;
 	export let updateUserForm: any;
 	let isSheetOpen = false;
+
+	const userData = writable({
+		name: '',
+		email: '',
+		integer: 0,
+		isAdmin: false,
+		floatval: 0.0,
+		birthday: ''
+	});
+	$: updateUserData = userData;
+	console.log('Form data:', $updateUserData);
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
@@ -49,7 +61,7 @@
 	});
 
 	// Mise à jour des données utilisateur lorsque le message de mise à jour change
-	$: if (updateUserMessage === 'User updated successfully') {
+	$: if ($updateUserMessage === 'User updated successfully') {
 		isSheetOpen = false;
 		birthdayValue = undefined; // Reset the date value
 		$updateUserData.birthday = ''; // Clear the form data
@@ -59,13 +71,19 @@
 	$: if (user) {
 		updateUserDetails();
 	}
+
+	const test = async () => {
+		console.log('Form data:', $updateUserData);
+	};
+
+	const clickOpenSheet = () => {
+		isSheetOpen = true;
+	};
 </script>
 
 <Sheet.Root open={isSheetOpen}>
 	<Sheet.Trigger asChild let:builder>
-		<Button builders={[builder]} variant="outline" on:click={() => (isSheetOpen = true)}>
-			update
-		</Button>
+		<Button builders={[builder]} variant="outline" on:click={clickOpenSheet}>update</Button>
 	</Sheet.Trigger>
 	<Sheet.Content side="right">
 		<Sheet.Header>
@@ -73,7 +91,7 @@
 			<Sheet.Description>Update user details here. Click save when you're done.</Sheet.Description>
 		</Sheet.Header>
 		<form method="POST" action="?/update" use:updateUserEnhance class="space-y-4">
-			<input type="hidden" name="userId" value={user.id} />
+			<input type="hidden" name="userId" bind:value={user.id} />
 			<div>
 				<Form.Field name="name" form={updateUserForm}>
 					<Form.Control let:attrs>
@@ -170,7 +188,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
-			<Button type="submit" variant="outline">Submit</Button>
+			<Button type="submit" variant="outline" on:click={test}>Submit</Button>
 		</form>
 	</Sheet.Content>
 </Sheet.Root>

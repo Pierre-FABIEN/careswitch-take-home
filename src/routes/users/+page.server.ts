@@ -51,20 +51,31 @@ export const actions: Actions = {
 	},
 	update: async ({ request }) => {
 		const formData = await request.formData();
-		console.log('FormData received:', formData);
-
-		const id = formData.get('userId');
+		const id = formData.get('userId') as string;
 
 		const form = await superValidate(formData, zod(userUpdateSchema));
 
-		if (!form.valid) return fail(400, { form });
+		if (!form.valid) {
+			console.error('Form validation failed:', form); // Log form validation errors
+			return fail(400, { form });
+		}
 
 		try {
-			await updateUser(id, form.data);
+			const data = {
+				userId: id,
+				name: formData.get('name') as string,
+				email: formData.get('email') as string,
+				integer: parseInt(formData.get('integer') as string, 10), // Convert to integer
+				isAdmin: formData.get('isAdmin') === 'true', // Convert to boolean
+				floatval: parseFloat(formData.get('floatval') as string), // Convert to float
+				birthday: formData.get('birthday') as string
+			};
+
+			await updateUser(data);
 
 			return message(form, 'User updated successfully');
 		} catch (error) {
-			console.error('Error updating user:', error);
+			console.error('Error updating user:', error); // Improved error logging
 			return fail(500, { form, error: 'An error occurred while updating the user' });
 		}
 	}

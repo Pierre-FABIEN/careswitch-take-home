@@ -58,7 +58,7 @@
 	let showMessage = false;
 	let animationClass = 'animate-slideIn';
 
-	$: if ($createUserMessage || $deleteUserMessage) {
+	$: if ($createUserMessage || $deleteUserMessage || $updateUserMessage) {
 		showMessage = true;
 		animationClass = 'animate-slideIn';
 		setTimeout(() => {
@@ -139,6 +139,8 @@
 		class="fixed bottom-4 right-4 max-w-[200px] border border-green-400 bg-green-500 px-4 py-3 text-white {animationClass}"
 		role="alert"
 	>
-		<Alert.Description>{$createUserMessage || $deleteUserMessage}</Alert.Description>
+		<Alert.Description
+			>{$createUserMessage || $deleteUserMessage || $updateUserMessage}</Alert.Description
+		>
 	</Alert.Root>
 {/if}
