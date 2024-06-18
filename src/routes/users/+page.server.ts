@@ -34,13 +34,15 @@ export const actions: Actions = {
 	},
 	delete: async ({ request }) => {
 		const formData = await request.formData();
-		const id = formData.get('userId');
+		console.log(formData, 'formData');
+
+		const id: FormDataEntryValue | null = formData.get('id');
 		const form = await superValidate(formData, zod(userDeleteSchema));
 
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			await deleteUser(id);
+			await deleteUser(id as string);
 			console.log('User ID deleted:', id); // Log for debugging
 
 			return message(form, 'User deleted successfully');
@@ -72,7 +74,6 @@ export const actions: Actions = {
 			};
 
 			await updateUser(data);
-
 			return message(form, 'User updated successfully');
 		} catch (error) {
 			console.error('Error updating user:', error); // Improved error logging

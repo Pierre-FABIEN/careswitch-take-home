@@ -36,7 +36,6 @@
 		birthday: ''
 	});
 	$: updateUserData = userData;
-	console.log('Form data:', $updateUserData);
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'

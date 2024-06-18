@@ -34,8 +34,8 @@
 
 	$: if ($createUserMessage === 'User created successfully') {
 		isSheetOpen = false;
-		birthdayValue = undefined; // Reset the date value
-		$createUserData.birthday = ''; // Clear the form data
+		birthdayValue = undefined;
+		$createUserData.birthday = '';
 	}
 </script>
 

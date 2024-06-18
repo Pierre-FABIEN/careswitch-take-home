@@ -68,10 +68,6 @@
 			}, 500); // Durée de l'animation de sortie
 		}, 5000);
 	}
-
-	onMount(() => {
-		console.log('Form data on mount:', $updateUserData);
-	});
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
@@ -118,7 +114,7 @@
 							</Table.Cell>
 							<Table.Cell>
 								<form method="POST" action="?/delete" use:deleteUserEnhance>
-									<input type="hidden" name="userId" value={user.id} />
+									<input type="hidden" name="id" value={user.id} />
 									<Button type="submit" variant="outline"><TrashIcon /></Button>
 								</form>
 							</Table.Cell>
