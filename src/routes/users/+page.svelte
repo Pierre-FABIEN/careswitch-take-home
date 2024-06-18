@@ -110,6 +110,7 @@
 							<Table.Cell>{new Date(user.birthday).toLocaleDateString()}</Table.Cell>
 							<Table.Cell>
 								<UpdateForm
+									{user}
 									{updateUserMessage}
 									{updateUserData}
 									{updateUserValidate}

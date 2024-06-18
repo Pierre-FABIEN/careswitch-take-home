@@ -16,7 +16,9 @@
 		getLocalTimeZone,
 		parseDate
 	} from '@internationalized/date';
+	import { onMount } from 'svelte';
 
+	export let user: any;
 	export let updateUserMessage: any;
 	export let updateUserData: any;
 	export let updateUserValidate: any;
@@ -28,14 +30,34 @@
 		dateStyle: 'long'
 	});
 
-	let birthdayValue: DateValue | undefined = $updateUserData.birthday
-		? parseDate($updateUserData.birthday)
-		: undefined;
+	let birthdayValue: DateValue | undefined = undefined;
 
-	$: if ($updateUserMessage === 'User updated successfully') {
+	// Fonction pour mettre à jour les détails de l'utilisateur
+	const updateUserDetails = () => {
+		$updateUserData.name = user.name;
+		$updateUserData.email = user.email;
+		$updateUserData.integer = user.integer;
+		$updateUserData.isAdmin = user.isAdmin;
+		$updateUserData.floatval = user.floatval;
+		$updateUserData.birthday = user.birthday;
+		birthdayValue = user.birthday ? parseDate(user.birthday.substring(0, 10)) : undefined;
+	};
+
+	// Initialisation des données utilisateur lors du montage
+	onMount(() => {
+		updateUserDetails();
+	});
+
+	// Mise à jour des données utilisateur lorsque le message de mise à jour change
+	$: if (updateUserMessage === 'User updated successfully') {
 		isSheetOpen = false;
 		birthdayValue = undefined; // Reset the date value
 		$updateUserData.birthday = ''; // Clear the form data
+	}
+
+	// Mettre à jour les détails de l'utilisateur lorsque l'utilisateur change
+	$: if (user) {
+		updateUserDetails();
 	}
 </script>
 
@@ -47,8 +69,8 @@
 	</Sheet.Trigger>
 	<Sheet.Content side="right">
 		<Sheet.Header>
-			<Sheet.Title>update a new user</Sheet.Title>
-			<Sheet.Description>update a new user here. Click save when you're done.</Sheet.Description>
+			<Sheet.Title>Update a user</Sheet.Title>
+			<Sheet.Description>Update user details here. Click save when you're done.</Sheet.Description>
 		</Sheet.Header>
 		<form method="POST" action="?/update" use:updateUserEnhance class="space-y-4">
 			<div>
