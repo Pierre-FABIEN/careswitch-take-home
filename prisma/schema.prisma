@@ -8,28 +8,26 @@ datasource db {
 }
 
 model User {
-  id         String           @id @default(cuid())
+  id         String          @id @default(cuid())
   name       String
   email      String
   integer    Int
-  isAdmin    Boolean          @default(false)
+  isAdmin    Boolean         @default(false)
   floatval   Float
   birthday   String
-  workspaces UserWorkspaces[]
+  workspaces UserWorkspace[]
 }
 
 model Workspace {
-  id    String           @id @default(cuid())
+  id    String          @id @default(cuid())
   name  String
-  users UserWorkspaces[]
+  users UserWorkspace[]
 }
 
-model UserWorkspaces {
-  userId      String
+model UserWorkspace {
+  id          String    @id @default(cuid())
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
   workspaceId String
-
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-
-  @@id([userId, workspaceId])
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String
 }

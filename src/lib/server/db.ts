@@ -72,3 +72,56 @@ export async function updateUser(data: {
 		throw error;
 	}
 }
+
+// Function to get all workspaces
+export async function getWorkspaces() {
+	const workspaces = await prisma.workspace.findMany({
+		include: { users: true }
+	});
+
+	return workspaces.map((workspace) => ({
+		...workspace
+	}));
+}
+
+// Function to create a new workspace
+export async function createWorkspace(data: { name: string }) {
+	try {
+		const workspace = await prisma.workspace.create({
+			data
+		});
+		return workspace;
+	} catch (error) {
+		console.error('Error creating workspace:', error);
+		throw error;
+	}
+}
+
+// Function to delete a workspace by ID
+export async function deleteWorkspace(workspaceId: string) {
+	try {
+		await prisma.workspace.delete({
+			where: { id: workspaceId }
+		});
+	} catch (error) {
+		console.error('Error deleting workspace:', error);
+		throw new Error('Could not delete workspace');
+	}
+}
+
+// Function to update a workspace
+export async function updateWorkspace(data: { id: string; name: string }) {
+	try {
+		const workspace = await prisma.workspace.update({
+			where: { id: data.id },
+			data: {
+				name: data.name
+			}
+		});
+
+		return workspace;
+	} catch (error) {
+		console.error('Error updating workspace:', error);
+		throw error;
+	}
+}

@@ -128,10 +128,21 @@ async function seed() {
 			}
 		];
 
-		const users = await prisma.$transaction(async (txn) => {
+		const workspacesData = [
+			{ name: 'Workspace 1' },
+			{ name: 'Workspace 2' },
+			{ name: 'Workspace 3' },
+			{ name: 'Workspace 4' },
+			{ name: 'Workspace 5' }
+		];
+
+		const usersAndWorkspaces = await prisma.$transaction(async (txn) => {
+			// Clear existing data
+			await txn.userWorkspace.deleteMany();
 			await txn.user.deleteMany();
 			await txn.workspace.deleteMany();
 
+			// Create users
 			const createdUsers = [];
 
 			for (const userData of usersData) {
@@ -141,19 +152,32 @@ async function seed() {
 				createdUsers.push(user);
 			}
 
-			const workspace = await txn.workspace.create({
-				data: {
-					name: 'Workspace 1',
-					users: {
-						create: createdUsers.map((user) => ({ userId: user.id }))
-					}
-				}
-			});
+			// Create workspaces
+			const createdWorkspaces = [];
 
-			return { users: createdUsers, workspace };
+			for (const workspaceData of workspacesData) {
+				const workspace = await txn.workspace.create({
+					data: workspaceData
+				});
+				createdWorkspaces.push(workspace);
+			}
+
+			// Associate all users with each workspace
+			for (const workspace of createdWorkspaces) {
+				for (const user of createdUsers) {
+					await txn.userWorkspace.create({
+						data: {
+							userId: user.id,
+							workspaceId: workspace.id
+						}
+					});
+				}
+			}
+
+			return { users: createdUsers, workspaces: createdWorkspaces };
 		});
 
-		console.log(`Created users and workspace: ${JSON.stringify(users)}`);
+		console.log(`Created users and workspaces: ${JSON.stringify(usersAndWorkspaces)}`);
 	} catch (error) {
 		console.error('Error seeding database:', error);
 	} finally {

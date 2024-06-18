@@ -27,7 +27,7 @@
 	export let data: {
 		workspaceCreateform: SuperValidated<Infer<WorkspaceCreateSchema>>;
 		workspaceDeleteform: SuperValidated<Infer<WorkspaceDeleteSchema>>;
-		workspaceUpdateSchema: SuperValidated<Infer<WorkspaceUpdateSchema>>;
+		workspaceUpdateform: SuperValidated<Infer<WorkspaceUpdateSchema>>;
 		workspaces: any[];
 	};
 
@@ -36,7 +36,7 @@
 		id: 'createWorkspaceForm'
 	});
 
-	const updateWorkspaceForm = superForm(data.workspaceUpdateSchema, {
+	const updateWorkspaceForm = superForm(data.workspaceUpdateform, {
 		validators: zodClient(workspaceUpdateSchema),
 		id: 'updateWorkspaceForm'
 	});
@@ -76,6 +76,8 @@
 			}, 500); // Durée de l'animation de sortie
 		}, 5000);
 	}
+
+	console.log(data);
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
@@ -93,11 +95,6 @@
 			<Table.Header>
 				<Table.Row>
 					<Table.Head>Name</Table.Head>
-					<Table.Head>Email</Table.Head>
-					<Table.Head>Integer</Table.Head>
-					<Table.Head>Admin</Table.Head>
-					<Table.Head>Float value</Table.Head>
-					<Table.Head>Birthday</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -105,20 +102,15 @@
 					{#each data.workspaces as workspace (workspace.id)}
 						<Table.Row>
 							<Table.Cell>{workspace.name}</Table.Cell>
-							<Table.Cell>{workspace.email}</Table.Cell>
-							<Table.Cell>{workspace.integer}</Table.Cell>
-							<Table.Cell>{workspace.isAdmin}</Table.Cell>
-							<Table.Cell>{workspace.floatval}</Table.Cell>
-							<Table.Cell>{new Date(workspace.birthday).toLocaleDateString()}</Table.Cell>
 							<Table.Cell>
-								<UpdateForm
+								<!-- <UpdateForm
 									{workspace}
 									{updateWorkspaceMessage}
 									{updateWorkspaceData}
 									{updateWorkspaceValidate}
 									{updateWorkspaceEnhance}
 									{updateWorkspaceForm}
-								/>
+								/> -->
 							</Table.Cell>
 							<Table.Cell>
 								<form method="POST" action="?/delete" use:deleteWorkspaceEnhance>
