@@ -6,11 +6,9 @@
 	import { Calendar } from '$ui/calendar';
 	import { buttonVariants } from '$ui/button';
 	import CalendarIcon from 'svelte-radix/Calendar.svelte';
-	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import { cn } from '$lib/utils.js';
 	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
 	import { Button } from '$ui/button';
-	import { writable } from 'svelte/store';
 
 	import {
 		DateFormatter,
@@ -26,68 +24,47 @@
 	export let updateUserValidate: any;
 	export let updateUserEnhance: any;
 	export let updateUserForm: any;
+	let isSheetOpen = false;
 
-	let isSheetOpen = writable(false);
-
-	// Date Formatter
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
 	});
 
-	// Store for birthday value
 	let birthdayValue: DateValue | undefined = undefined;
 
-	// Reactive store for user data
-	const userData = writable({
-		name: '',
-		email: '',
-		integer: 0,
-		isAdmin: false,
-		floatval: 0.0,
-		birthday: ''
-	});
-
-	// Link userData to updateUserData
-	$: updateUserData = userData;
-
-	// Function to update user details
+	// Fonction pour mettre à jour les détails de l'utilisateur
 	const updateUserDetails = () => {
-		userData.set({
-			name: user.name,
-			email: user.email,
-			integer: user.integer,
-			isAdmin: user.isAdmin,
-			floatval: user.floatval,
-			birthday: user.birthday
-		});
+		$updateUserData.name = user.name;
+		$updateUserData.email = user.email;
+		$updateUserData.integer = user.integer;
+		$updateUserData.isAdmin = user.isAdmin;
+		$updateUserData.floatval = user.floatval;
+		$updateUserData.birthday = user.birthday;
 		birthdayValue = user.birthday ? parseDate(user.birthday.substring(0, 10)) : undefined;
 	};
 
-	// Initialize user data on mount
+	// Initialisation des données utilisateur lors du montage
 	onMount(() => {
-		console.log('user:', user);
 		updateUserDetails();
 	});
 
-	// Reset form on successful update
-	$: if ($updateUserMessage === 'User updated successfully') {
-		isSheetOpen.set(false);
+	// Mise à jour des données utilisateur lorsque le message de mise à jour change
+	$: if (updateUserMessage === 'User updated successfully') {
+		isSheetOpen = false;
 		birthdayValue = undefined; // Reset the date value
-		userData.update((data) => ({ ...data, birthday: '' })); // Clear the form data
+		$updateUserData.birthday = ''; // Clear the form data
 	}
 
-	// Update user details when user changes
+	// Mettre à jour les détails de l'utilisateur lorsque l'utilisateur change
 	$: if (user) {
 		updateUserDetails();
 	}
-
-	$: console.log('userData:', $userData, 'updateUserData', $updateUserData);
 </script>
 
-<Sheet.Root bind:open={$isSheetOpen}>
-	<Sheet.Trigger asChild>
-		<Button variant="outline" on:click={() => isSheetOpen.set(true)}>
-			<PencilIcon />
+<Sheet.Root open={isSheetOpen}>
+	<Sheet.Trigger asChild let:builder>
+		<Button builders={[builder]} variant="outline" on:click={() => (isSheetOpen = true)}>
+			update
 		</Button>
 	</Sheet.Trigger>
 	<Sheet.Content side="right">
@@ -101,7 +78,7 @@
 				<Form.Field name="name" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Name</Form.Label>
-						<Input {...attrs} type="text" bind:value={$userData.name} />
+						<Input {...attrs} type="text" bind:value={$updateUserData.name} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
@@ -110,38 +87,42 @@
 				<Form.Field name="email" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Email</Form.Label>
-						<Input {...attrs} type="email" bind:value={$userData.email} />
+						<Input {...attrs} type="email" bind:value={$updateUserData.email} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
+
 			<div>
 				<Form.Field name="integer" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Integer</Form.Label>
-						<Input {...attrs} type="number" bind:value={$userData.integer} />
+						<Input {...attrs} type="number" bind:value={$updateUserData.integer} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
+
 			<div>
 				<Form.Field name="isAdmin" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Admin</Form.Label>
-						<Checkbox {...attrs} bind:checked={$userData.isAdmin} />
+						<Checkbox {...attrs} bind:checked={$updateUserData.isAdmin} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
+
 			<div>
 				<Form.Field name="floatval" form={updateUserForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Float value</Form.Label>
-						<Input {...attrs} type="number" step="any" bind:value={$userData.floatval} />
+						<Input {...attrs} type="number" step="any" bind:value={$updateUserData.floatval} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
+
 			<div>
 				<Form.Field form={updateUserForm} name="birthday" class="flex flex-col">
 					<Form.Control let:attrs>
@@ -174,19 +155,16 @@
 									}}
 									onValueChange={(value) => {
 										if (value === undefined) {
-											userData.update((data) => ({ ...data, birthday: '' }));
+											$updateUserData.birthday = '';
 											updateUserValidate('birthday');
 											return;
 										}
-										userData.update((data) => ({
-											...data,
-											birthday: value.toDate('UTC').toISOString()
-										}));
+										$updateUserData.birthday = value.toDate('UTC').toISOString();
 										updateUserValidate('birthday');
 									}}
 								/>
 							</Popover.Content>
-							<input hidden bind:value={$userData.birthday} name={attrs.name} />
+							<input hidden bind:value={$updateUserData.birthday} name={attrs.name} />
 						</Popover.Root>
 					</Form.Control>
 					<Form.FieldErrors />

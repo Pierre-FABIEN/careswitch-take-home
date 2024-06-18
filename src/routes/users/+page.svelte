@@ -25,19 +25,16 @@
 
 	const createUserForm = superForm(data.userCreateform, {
 		validators: zodClient(userCreateSchema),
-		dataType: 'json',
 		id: 'createUserForm'
 	});
 
 	const updateUserForm = superForm(data.userCreateform, {
 		validators: zodClient(userUpdateSchema),
-		dataType: 'json',
 		id: 'updateUserForm'
 	});
 
 	const deleteUserForm = superForm(data.userDeleteform, {
 		validators: zodClient(userDeleteSchema),
-		dataType: 'json',
 		id: 'deleteUserForm'
 	});
 
@@ -73,7 +70,7 @@
 	}
 
 	onMount(() => {
-		console.log(data);
+		console.log('Form data on mount:', $updateUserData);
 	});
 </script>
 

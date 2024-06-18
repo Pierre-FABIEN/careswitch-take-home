@@ -51,6 +51,8 @@ export const actions: Actions = {
 	},
 	update: async ({ request }) => {
 		const formData = await request.formData();
+		console.log('FormData received:', formData);
+
 		const id = formData.get('userId');
 
 		const form = await superValidate(formData, zod(userUpdateSchema));
