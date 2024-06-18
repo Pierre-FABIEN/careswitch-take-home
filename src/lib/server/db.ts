@@ -34,6 +34,12 @@ export async function createUser(data: {
 
 export async function deleteUser(userId: string) {
 	try {
+		// Supprimer les enregistrements dans UserWorkspace associés à l'utilisateur
+		await prisma.userWorkspace.deleteMany({
+			where: { userId }
+		});
+
+		// Supprimer l'utilisateur
 		await prisma.user.delete({
 			where: { id: userId }
 		});
