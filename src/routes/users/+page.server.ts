@@ -3,9 +3,9 @@ import { fail, type Actions } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 
-import { userCreateSchema } from '$lib/schemas/userCreateSchema';
-import { userDeleteSchema } from '$lib/schemas/userDeleteSchema';
-import { userUpdateSchema } from '$lib/schemas/userUpdateSchema';
+import { userCreateSchema } from '$lib/schemas/users/userCreateSchema';
+import { userDeleteSchema } from '$lib/schemas/users/userDeleteSchema';
+import { userUpdateSchema } from '$lib/schemas/users/userUpdateSchema';
 import { createUser, deleteUser, getUsers, updateUser } from '$server/db';
 
 export const load: PageServerLoad = async () => {
@@ -53,7 +53,6 @@ export const actions: Actions = {
 	},
 	update: async ({ request }) => {
 		const formData = await request.formData();
-		const id = formData.get('userId') as string;
 
 		const form = await superValidate(formData, zod(userUpdateSchema));
 
@@ -64,7 +63,7 @@ export const actions: Actions = {
 
 		try {
 			const data = {
-				userId: id,
+				id: formData.get('id') as string,
 				name: formData.get('name') as string,
 				email: formData.get('email') as string,
 				integer: parseInt(formData.get('integer') as string, 10), // Convert to integer

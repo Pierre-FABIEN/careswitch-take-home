@@ -2,9 +2,9 @@
 	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	import { userCreateSchema, type UserCreateSchema } from '$lib/schemas/userCreateSchema';
-	import { userDeleteSchema, type UserDeleteSchema } from '$lib/schemas/userDeleteSchema';
-	import { userUpdateSchema, type UserUpdateSchema } from '$lib/schemas/userUpdateSchema';
+	import { userCreateSchema, type UserCreateSchema } from '$lib/schemas/users/userCreateSchema';
+	import { userDeleteSchema, type UserDeleteSchema } from '$lib/schemas/users/userDeleteSchema';
+	import { userUpdateSchema, type UserUpdateSchema } from '$lib/schemas/users/userUpdateSchema';
 
 	import CreateForm from './CreateForm.svelte';
 
@@ -13,7 +13,6 @@
 	import { Button } from '$ui/button';
 	import TrashIcon from 'svelte-radix/Trash.svelte';
 
-	import { onMount } from 'svelte';
 	import UpdateForm from './UpdateForm.svelte';
 
 	export let data: {

@@ -19,15 +19,15 @@
 	} from '@internationalized/date';
 	import { onMount } from 'svelte';
 
-	export let user: any;
-	export let updateUserMessage: any;
-	export let updateUserData: any;
-	export let updateUserValidate: any;
-	export let updateUserEnhance: any;
-	export let updateUserForm: any;
+	export let workspace: any;
+	export let updateWorkspaceMessage: any;
+	export let updateWorkspaceData: any;
+	export let updateWorkspaceValidate: any;
+	export let updateWorkspaceEnhance: any;
+	export let updateWorkspaceForm: any;
 	let isSheetOpen = false;
 
-	const userData = writable({
+	const workspaceData = writable({
 		name: '',
 		email: '',
 		integer: 0,
@@ -35,7 +35,7 @@
 		floatval: 0.0,
 		birthday: ''
 	});
-	$: updateUserData = userData;
+	$: updateWorkspaceData = workspaceData;
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
@@ -44,35 +44,35 @@
 	let birthdayValue: DateValue | undefined = undefined;
 
 	// Fonction pour mettre à jour les détails de l'utilisateur
-	const updateUserDetails = () => {
-		$updateUserData.name = user.name;
-		$updateUserData.email = user.email;
-		$updateUserData.integer = user.integer;
-		$updateUserData.isAdmin = user.isAdmin;
-		$updateUserData.floatval = user.floatval;
-		$updateUserData.birthday = user.birthday;
-		birthdayValue = user.birthday ? parseDate(user.birthday.substring(0, 10)) : undefined;
+	const updateWorkspaceDetails = () => {
+		$updateWorkspaceData.name = workspace.name;
+		$updateWorkspaceData.email = workspace.email;
+		$updateWorkspaceData.integer = workspace.integer;
+		$updateWorkspaceData.isAdmin = workspace.isAdmin;
+		$updateWorkspaceData.floatval = workspace.floatval;
+		$updateWorkspaceData.birthday = workspace.birthday;
+		birthdayValue = workspace.birthday ? parseDate(workspace.birthday.substring(0, 10)) : undefined;
 	};
 
 	// Initialisation des données utilisateur lors du montage
 	onMount(() => {
-		updateUserDetails();
+		updateWorkspaceDetails();
 	});
 
 	// Mise à jour des données utilisateur lorsque le message de mise à jour change
-	$: if ($updateUserMessage === 'User updated successfully') {
+	$: if ($updateWorkspaceMessage === 'Workspace updated successfully') {
 		isSheetOpen = false;
 		birthdayValue = undefined; // Reset the date value
-		$updateUserData.birthday = ''; // Clear the form data
+		$updateWorkspaceData.birthday = ''; // Clear the form data
 	}
 
 	// Mettre à jour les détails de l'utilisateur lorsque l'utilisateur change
-	$: if (user) {
-		updateUserDetails();
+	$: if (workspace) {
+		updateWorkspaceDetails();
 	}
 
 	const test = async () => {
-		console.log('Form data:', $updateUserData);
+		console.log('Form data:', $updateWorkspaceData);
 	};
 
 	const clickOpenSheet = () => {
@@ -86,62 +86,64 @@
 	</Sheet.Trigger>
 	<Sheet.Content side="right">
 		<Sheet.Header>
-			<Sheet.Title>Update a user</Sheet.Title>
-			<Sheet.Description>Update user details here. Click save when you're done.</Sheet.Description>
+			<Sheet.Title>Update a Workspace</Sheet.Title>
+			<Sheet.Description
+				>Update Workspace details here. Click save when you're done.</Sheet.Description
+			>
 		</Sheet.Header>
-		<form method="POST" action="?/update" use:updateUserEnhance class="space-y-4">
-			<input type="hidden" name="id" bind:value={user.id} />
+		<form method="POST" action="?/update" use:updateWorkspaceEnhance class="space-y-4">
+			<input type="hidden" name="id" bind:value={workspace.id} />
 			<div>
-				<Form.Field name="name" form={updateUserForm}>
+				<Form.Field name="name" form={updateWorkspaceForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Name</Form.Label>
-						<Input {...attrs} type="text" bind:value={$updateUserData.name} />
+						<Input {...attrs} type="text" bind:value={$updateWorkspaceData.name} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 			<div>
-				<Form.Field name="email" form={updateUserForm}>
+				<Form.Field name="email" form={updateWorkspaceForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Email</Form.Label>
-						<Input {...attrs} type="email" bind:value={$updateUserData.email} />
+						<Input {...attrs} type="email" bind:value={$updateWorkspaceData.email} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 
 			<div>
-				<Form.Field name="integer" form={updateUserForm}>
+				<Form.Field name="integer" form={updateWorkspaceForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Integer</Form.Label>
-						<Input {...attrs} type="number" bind:value={$updateUserData.integer} />
+						<Input {...attrs} type="number" bind:value={$updateWorkspaceData.integer} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 
 			<div>
-				<Form.Field name="isAdmin" form={updateUserForm}>
+				<Form.Field name="isAdmin" form={updateWorkspaceForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Admin</Form.Label>
-						<Checkbox {...attrs} bind:checked={$updateUserData.isAdmin} />
+						<Checkbox {...attrs} bind:checked={$updateWorkspaceData.isAdmin} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 
 			<div>
-				<Form.Field name="floatval" form={updateUserForm}>
+				<Form.Field name="floatval" form={updateWorkspaceForm}>
 					<Form.Control let:attrs>
 						<Form.Label>Float value</Form.Label>
-						<Input {...attrs} type="number" step="any" bind:value={$updateUserData.floatval} />
+						<Input {...attrs} type="number" step="any" bind:value={$updateWorkspaceData.floatval} />
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
 
 			<div>
-				<Form.Field form={updateUserForm} name="birthday" class="flex flex-col">
+				<Form.Field form={updateWorkspaceForm} name="birthday" class="flex flex-col">
 					<Form.Control let:attrs>
 						<Form.Label>Date of Birth</Form.Label>
 						<Popover.Root>
@@ -172,16 +174,16 @@
 									}}
 									onValueChange={(value) => {
 										if (value === undefined) {
-											$updateUserData.birthday = '';
-											updateUserValidate('birthday');
+											$updateWorkspaceData.birthday = '';
+											updateWorkspaceValidate('birthday');
 											return;
 										}
-										$updateUserData.birthday = value.toDate('UTC').toISOString();
-										updateUserValidate('birthday');
+										$updateWorkspaceData.birthday = value.toDate('UTC').toISOString();
+										updateWorkspaceValidate('birthday');
 									}}
 								/>
 							</Popover.Content>
-							<input hidden bind:value={$updateUserData.birthday} name={attrs.name} />
+							<input hidden bind:value={$updateWorkspaceData.birthday} name={attrs.name} />
 						</Popover.Root>
 					</Form.Control>
 					<Form.FieldErrors />
