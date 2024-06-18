@@ -9,11 +9,11 @@
 	import CreateForm from './CreateForm.svelte';
 
 	import * as Table from '$ui/table';
-	import * as Alert from '$ui/alert';
 	import { Button } from '$ui/button';
 	import TrashIcon from 'svelte-radix/Trash.svelte';
 
 	import UpdateForm from './UpdateForm.svelte';
+	import MessageSubmit from './MessageSubmit.svelte';
 
 	export let data: {
 		userCreateform: SuperValidated<Infer<UserCreateSchema>>;
@@ -53,20 +53,6 @@
 
 	const { enhance: deleteUserEnhance, message: deleteUserMessage } = deleteUserForm;
 
-	// Animation
-	let showMessage = false;
-	let animationClass = 'animate-slideIn';
-
-	$: if ($createUserMessage || $deleteUserMessage || $updateUserMessage) {
-		showMessage = true;
-		animationClass = 'animate-slideIn';
-		setTimeout(() => {
-			animationClass = 'animate-slideOut';
-			setTimeout(() => {
-				showMessage = false;
-			}, 500); // Durée de l'animation de sortie
-		}, 5000);
-	}
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
@@ -129,13 +115,4 @@
 	</div>
 </div>
 
-{#if showMessage}
-	<Alert.Root
-		class="fixed bottom-4 right-4 max-w-[200px] border border-green-400 bg-green-500 px-4 py-3 text-white {animationClass}"
-		role="alert"
-	>
-		<Alert.Description
-			>{$createUserMessage || $deleteUserMessage || $updateUserMessage}</Alert.Description
-		>
-	</Alert.Root>
-{/if}
+<MessageSubmit {createUserMessage} {deleteUserMessage} {updateUserMessage} />

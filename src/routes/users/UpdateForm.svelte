@@ -18,6 +18,7 @@
 		parseDate
 	} from '@internationalized/date';
 	import { onMount } from 'svelte';
+	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 
 	export let user: any;
 	export let updateUserMessage: any;
@@ -82,7 +83,7 @@
 
 <Sheet.Root open={isSheetOpen}>
 	<Sheet.Trigger asChild let:builder>
-		<Button builders={[builder]} variant="outline" on:click={clickOpenSheet}>update</Button>
+		<Button builders={[builder]} variant="outline" on:click={clickOpenSheet}><PencilIcon /></Button>
 	</Sheet.Trigger>
 	<Sheet.Content side="right">
 		<Sheet.Header>

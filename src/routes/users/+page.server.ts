@@ -6,14 +6,15 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { userCreateSchema } from '$lib/schemas/users/userCreateSchema';
 import { userDeleteSchema } from '$lib/schemas/users/userDeleteSchema';
 import { userUpdateSchema } from '$lib/schemas/users/userUpdateSchema';
-import { createUser, deleteUser, getUsers, updateUser } from '$server/db';
+import { createUser, deleteUser, getUsers, getWorkspaces, updateUser } from '$server/db';
 
 export const load: PageServerLoad = async () => {
 	const userCreateform = await superValidate(zod(userCreateSchema));
 	const userDeleteform = await superValidate(zod(userDeleteSchema));
 	const userUpdateform = await superValidate(zod(userUpdateSchema));
+	const workspaces = await getWorkspaces();
 	const users = await getUsers();
-	return { userCreateform, userDeleteform, userUpdateform, users };
+	return { userCreateform, userDeleteform, userUpdateform, workspaces, users };
 };
 
 export const actions: Actions = {

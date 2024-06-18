@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
 	import { Input } from '$ui/input';
@@ -55,7 +56,7 @@
 
 <Sheet.Root open={isSheetOpen}>
 	<Sheet.Trigger asChild let:builder>
-		<Button builders={[builder]} variant="outline" on:click={clickOpenSheet}>update</Button>
+		<Button builders={[builder]} variant="outline" on:click={clickOpenSheet}><PencilIcon /></Button>
 	</Sheet.Trigger>
 	<Sheet.Content side="right">
 		<Sheet.Header>
