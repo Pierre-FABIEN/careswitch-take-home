@@ -55,13 +55,13 @@
 		validate: updateUserValidate
 	} = updateUserForm;
 
-	const { enhance: deleteUserEnhance } = deleteUserForm;
+	const { enhance: deleteUserEnhance, message: deleteUserMessage } = deleteUserForm;
 
 	// Animation
 	let showMessage = false;
 	let animationClass = 'animate-slideIn';
 
-	$: if ($createUserMessage) {
+	$: if ($createUserMessage || $deleteUserMessage) {
 		showMessage = true;
 		animationClass = 'animate-slideIn';
 		setTimeout(() => {
@@ -75,6 +75,8 @@
 	onMount(() => {
 		console.log(data);
 	});
+
+	$: console.log($deleteUserMessage);
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
@@ -142,6 +144,6 @@
 		class="fixed bottom-4 right-4 max-w-[200px] border border-green-400 bg-green-500 px-4 py-3 text-white {animationClass}"
 		role="alert"
 	>
-		<Alert.Description>{$createUserMessage}</Alert.Description>
+		<Alert.Description>{$createUserMessage || $deleteUserMessage}</Alert.Description>
 	</Alert.Root>
 {/if}
