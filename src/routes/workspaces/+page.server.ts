@@ -26,7 +26,7 @@ export const actions: Actions = {
 		try {
 			await createWorkspace(form.data);
 
-			return message(form, 'workspace created successfully');
+			return message(form, 'Workspace created successfully');
 		} catch (error) {
 			console.error('Error creating workspace:', error);
 			return fail(500, { form, error: 'An error occurred while creating the workspace' });
@@ -45,7 +45,7 @@ export const actions: Actions = {
 			await deleteWorkspace(id as string);
 			console.log('workspace ID deleted:', id); // Log for debugging
 
-			return message(form, 'workspace deleted successfully');
+			return message(form, 'Workspace deleted successfully');
 		} catch (error) {
 			console.error('Error deleting workspace:', error);
 			return fail(500, { form, error: 'An error occurred while deleting the workspace' });

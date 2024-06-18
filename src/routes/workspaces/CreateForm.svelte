@@ -3,31 +3,37 @@
 	import * as Sheet from '$ui/sheet';
 	import { Input } from '$ui/input';
 	import { Button } from '$ui/button';
+	import { writable } from 'svelte/store';
 
 	export let createWorkspaceMessage: any;
 	export let createWorkspaceData: any;
 	export let createWorkspaceValidate: any;
 	export let createWorkspaceEnhance: any;
 	export let createWorkspaceForm: any;
-	let isSheetOpen = false;
 
+	// Création du store pour gérer l'état de isSheetOpen
+	const isSheetOpen = writable(false);
+
+	// Réaction au message de création
 	$: if ($createWorkspaceMessage === 'Workspace created successfully') {
-		isSheetOpen = false;
+		isSheetOpen.set(false);
 	}
+
+	$: console.log($createWorkspaceMessage);
 </script>
 
-<Sheet.Root open={isSheetOpen}>
+<Sheet.Root open={$isSheetOpen}>
 	<Sheet.Trigger asChild let:builder>
-		<Button builders={[builder]} variant="outline" on:click={() => (isSheetOpen = true)}>
+		<Button builders={[builder]} variant="outline" on:click={() => isSheetOpen.set(true)}>
 			Create
 		</Button>
 	</Sheet.Trigger>
 	<Sheet.Content side="right">
 		<Sheet.Header>
 			<Sheet.Title>Create a new Workspace</Sheet.Title>
-			<Sheet.Description
-				>Create a new Workspace here. Click save when you're done.</Sheet.Description
-			>
+			<Sheet.Description>
+				Create a new Workspace here. Click save when you're done.
+			</Sheet.Description>
 		</Sheet.Header>
 		<form method="POST" action="?/create" use:createWorkspaceEnhance class="space-y-4">
 			<div>

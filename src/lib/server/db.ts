@@ -98,10 +98,16 @@ export async function createWorkspace(data: { name: string }) {
 }
 
 // Function to delete a workspace by ID
-export async function deleteWorkspace(workspaceId: string) {
+export async function deleteWorkspace(id: string) {
 	try {
+		// Supprimer les enregistrements dans UserWorkspace associés au Workspace
+		await prisma.userWorkspace.deleteMany({
+			where: { workspaceId: id }
+		});
+
+		// Supprimer le Workspace
 		await prisma.workspace.delete({
-			where: { id: workspaceId }
+			where: { id }
 		});
 	} catch (error) {
 		console.error('Error deleting workspace:', error);

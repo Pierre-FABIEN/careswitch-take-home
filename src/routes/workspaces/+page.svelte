@@ -103,14 +103,14 @@
 						<Table.Row>
 							<Table.Cell>{workspace.name}</Table.Cell>
 							<Table.Cell>
-								<!-- <UpdateForm
+								<UpdateForm
 									{workspace}
 									{updateWorkspaceMessage}
 									{updateWorkspaceData}
 									{updateWorkspaceValidate}
 									{updateWorkspaceEnhance}
 									{updateWorkspaceForm}
-								/> -->
+								/>
 							</Table.Cell>
 							<Table.Cell>
 								<form method="POST" action="?/delete" use:deleteWorkspaceEnhance>
