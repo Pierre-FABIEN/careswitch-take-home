@@ -31,17 +31,18 @@ export const actions: Actions = {
 		}
 	},
 	delete: async ({ request }) => {
-		console.log(request, 'request');
-
 		const formData = await request.formData();
+		const id = formData.get('userId');
+
 		const form = await superValidate(formData, zod(userDeleteSchema));
+
+		console.log(form, 'form');
 
 		if (!form.valid) return fail(400, { form });
 
-		const userId = form.data.userId;
-
 		try {
-			await deleteUser(userId);
+			await deleteUser(id);
+			console.log('User ID deleted:', id); // Log for debugging
 
 			return message(form, 'User deleted successfully');
 		} catch (error) {
