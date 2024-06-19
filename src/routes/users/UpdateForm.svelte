@@ -86,13 +86,9 @@
 		updateUserDetails();
 	}
 
-	$: hiddenWorkspacesValue =
-		'[' +
-		$updateUserData.workspaces
-			.filter(({ checked }: { checked: boolean }) => checked)
-			.map(({ id }: { id: string }) => `"${id}"`)
-			.join(',') +
-		']';
+	$: hiddenWorkspacesValue = JSON.stringify(
+		$updateUserData.workspaces.filter(({ checked }) => checked).map(({ id }) => id)
+	);
 
 	$: hiddenIsAdminValue = $updateUserData.isAdmin ? 'true' : 'false';
 </script>

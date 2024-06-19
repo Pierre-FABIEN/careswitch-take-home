@@ -6,7 +6,12 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { workspaceCreateSchema } from '$lib/schemas/workspaces/workspaceCreateSchema';
 import { workspaceDeleteSchema } from '$lib/schemas/workspaces/workspaceDeleteSchema';
 import { workspaceUpdateSchema } from '$lib/schemas/workspaces/workspaceUpdateSchema';
-import { createWorkspace, deleteWorkspace, getWorkspaces, updateWorkspace } from '$server/db';
+import {
+	createWorkspace,
+	deleteWorkspace,
+	getWorkspaces,
+	updateWorkspace
+} from '$server/workspacesServices';
 
 export const load: PageServerLoad = async () => {
 	const workspaceCreateform = await superValidate(zod(workspaceCreateSchema));

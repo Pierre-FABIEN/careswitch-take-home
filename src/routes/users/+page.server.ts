@@ -6,7 +6,8 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { userCreateSchema } from '$lib/schemas/users/userCreateSchema';
 import { userDeleteSchema } from '$lib/schemas/users/userDeleteSchema';
 import { userUpdateSchema } from '$lib/schemas/users/userUpdateSchema';
-import { createUser, deleteUser, getUsers, getWorkspaces, updateUser } from '$server/db';
+import { createUser, deleteUser, getUsers, updateUser } from '$server/usersServices';
+import { getWorkspaces } from '$server/workspacesServices';
 
 export const load: PageServerLoad = async () => {
 	const userCreateform = await superValidate(zod(userCreateSchema));
@@ -64,6 +65,9 @@ export const actions: Actions = {
 		if (!form.valid) return fail(400, { form });
 
 		try {
+			const workspacesString = formData.get('workspaces') as string;
+			const workspaces = JSON.parse(workspacesString);
+
 			const userData = {
 				id: formData.get('id') as string,
 				name: formData.get('name') as string,
@@ -72,7 +76,7 @@ export const actions: Actions = {
 				isAdmin: formData.get('isAdmin') === 'true',
 				floatval: parseFloat(formData.get('floatval') as string),
 				birthday: formData.get('birthday') as string,
-				workspaces: formData.getAll('workspaces') as string[] // Getting workspace IDs
+				workspaces: workspaces
 			};
 
 			await updateUser(userData);
