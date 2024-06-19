@@ -115,11 +115,21 @@ export async function deleteUser(userId: string) {
 // Function to get all workspaces
 export async function getWorkspaces() {
 	const workspaces = await prisma.workspace.findMany({
-		include: { users: true }
+		include: {
+			users: {
+				include: {
+					user: true // Include the user details
+				}
+			}
+		}
 	});
 
 	return workspaces.map((workspace) => ({
-		...workspace
+		...workspace,
+		users: workspace.users.map((userWorkspace) => ({
+			id: userWorkspace.user.id,
+			name: userWorkspace.user.name
+		}))
 	}));
 }
 

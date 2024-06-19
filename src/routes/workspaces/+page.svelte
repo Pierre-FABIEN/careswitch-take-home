@@ -24,6 +24,7 @@
 
 	import UpdateForm from './UpdateForm.svelte';
 	import MessageSubmit from './MessageSubmit.svelte';
+	import { onMount } from 'svelte';
 
 	export let data: {
 		workspaceCreateform: SuperValidated<Infer<WorkspaceCreateSchema>>;
@@ -62,6 +63,10 @@
 	} = updateWorkspaceForm;
 
 	const { enhance: deleteWorkspaceEnhance, message: deleteWorkspaceMessage } = deleteWorkspaceForm;
+
+	onMount(() => {
+		console.log(data);
+	});
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
@@ -79,6 +84,7 @@
 			<Table.Header>
 				<Table.Row>
 					<Table.Head>Name</Table.Head>
+					<Table.Head>Users</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -86,6 +92,11 @@
 					{#each data.workspaces as workspace (workspace.id)}
 						<Table.Row>
 							<Table.Cell>{workspace.name}</Table.Cell>
+							<Table.Cell>
+								{#each workspace.users as user}
+									<span>{user.name}</span><br />
+								{/each}
+							</Table.Cell>
 							<Table.Cell>
 								<UpdateForm
 									{workspace}
