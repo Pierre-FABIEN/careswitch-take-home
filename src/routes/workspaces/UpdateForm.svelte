@@ -60,6 +60,7 @@
 		</Sheet.Header>
 		<form method="POST" action="?/update" use:updateWorkspaceEnhance class="space-y-4">
 			<input type="hidden" name="id" bind:value={workspace.id} />
+
 			<div>
 				<Form.Field name="name" form={updateWorkspaceForm}>
 					<Form.Control let:attrs>
