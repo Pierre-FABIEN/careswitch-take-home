@@ -6,7 +6,6 @@
 	import TrashIcon from 'svelte-radix/Trash.svelte';
 
 	import UpdateForm from './UpdateForm.svelte';
-	import MessageSubmit from './MessageSubmit.svelte';
 
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
@@ -24,6 +23,7 @@
 	} from '$lib/schemas/workspaces/workspaceUpdateSchema';
 
 	import CreateForm from './CreateForm.svelte';
+	import MessageHandler from '$components/MessageHandler.svelte';
 
 	export let data: {
 		workspaceCreateform: SuperValidated<Infer<WorkspaceCreateSchema>>;
@@ -116,4 +116,8 @@
 	</div>
 </div>
 
-<MessageSubmit {createWorkspaceMessage} {deleteWorkspaceMessage} {updateWorkspaceMessage} />
+<MessageHandler
+	createMessage={$createWorkspaceMessage || ''}
+	deleteMessage={$deleteWorkspaceMessage || ''}
+	updateMessage={$updateWorkspaceMessage || ''}
+/>

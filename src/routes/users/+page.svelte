@@ -2,6 +2,7 @@
 	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
+	import MessageHandler from '$components/MessageHandler.svelte';
 	import CreateForm from './CreateForm.svelte';
 
 	import * as Table from '$ui/table';
@@ -125,4 +126,9 @@
 	</div>
 </div>
 
-<MessageSubmit {createUserMessage} {deleteUserMessage} {updateUserMessage} />
+<!-- <MessageSubmit {createUserMessage} {deleteUserMessage} {updateUserMessage} /> -->
+<MessageHandler
+	createMessage={$createUserMessage || ''}
+	deleteMessage={$deleteUserMessage || ''}
+	updateMessage={$updateUserMessage || ''}
+/>
