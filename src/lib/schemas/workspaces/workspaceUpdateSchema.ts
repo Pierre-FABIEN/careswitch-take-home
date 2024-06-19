@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
 export const workspaceUpdateSchema = z.object({
-	// id: z.string(),
-	// name: z.string().min(3, 'Name must contain at least 3 characters')
+	id: z.string(),
+	name: z.string().min(3, 'Name must contain at least 3 characters'),
+	users: z.array(z.string()).optional()
 });
 
 export type WorkspaceUpdateSchema = typeof workspaceUpdateSchema;

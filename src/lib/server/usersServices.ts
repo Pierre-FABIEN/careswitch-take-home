@@ -68,8 +68,6 @@ export async function updateUser(data: {
 	try {
 		const { id, workspaces, ...userData } = data;
 
-		console.log('Received workspaces:', workspaces);
-
 		// Vérifier si les workspaces existent
 		if (workspaces && workspaces.length > 0) {
 			const workspacesExist = await checkWorkspacesExist(workspaces);
