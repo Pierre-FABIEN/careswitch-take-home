@@ -18,6 +18,7 @@
 		parseDate
 	} from '@internationalized/date';
 	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
 
 	export let data: any;
 	export let createUserMessage: any;
@@ -25,7 +26,9 @@
 	export let createUserValidate: any;
 	export let createUserEnhance: any;
 	export let createUserForm: any;
-	let isSheetOpen = false;
+
+	// Creating a store for isSheetOpen
+	const isSheetOpen = writable(false);
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
@@ -36,7 +39,7 @@
 		: undefined;
 
 	$: if ($createUserMessage === 'User created successfully') {
-		isSheetOpen = false;
+		isSheetOpen.set(false);
 		birthdayValue = undefined;
 		$createUserData.birthday = '';
 	}
@@ -57,12 +60,12 @@
 		.filter((workspace) => workspace.checked)
 		.map((workspace) => workspace.id);
 
-	$: console.log('wsegsewgswge', $createUserData);
+	$: hiddenWorkspacesValue = JSON.stringify($createUserData.workspaces);
 </script>
 
-<Sheet.Root open={isSheetOpen}>
+<Sheet.Root open={$isSheetOpen}>
 	<Sheet.Trigger asChild let:builder>
-		<Button builders={[builder]} variant="outline" on:click={() => (isSheetOpen = true)}>
+		<Button builders={[builder]} variant="outline" on:click={() => isSheetOpen.set(true)}>
 			Create
 		</Button>
 	</Sheet.Trigger>
@@ -188,7 +191,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
-			<input type="hidden" name="workspaces" bind:value={$createUserData.workspaces} />
+			<input type="hidden" name="workspaces" value={hiddenWorkspacesValue} />
 			<Button type="submit" variant="outline">Submit</Button>
 		</form>
 	</Sheet.Content>

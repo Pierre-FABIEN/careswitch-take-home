@@ -6,10 +6,19 @@ export default prisma;
 
 // Function to get all users
 export async function getUsers() {
-	const users = await prisma.user.findMany();
+	const users = await prisma.user.findMany({
+		include: {
+			workspaces: {
+				include: {
+					workspace: true
+				}
+			}
+		}
+	});
 
 	return users.map((user) => ({
-		...user
+		...user,
+		workspaces: user.workspaces.map((uw) => uw.workspace)
 	}));
 }
 
@@ -24,6 +33,13 @@ export async function createUser(data: {
 }) {
 	try {
 		const { workspaces, ...userData } = data;
+
+		if (workspaces && workspaces.length > 0) {
+			const workspacesExist = await checkWorkspacesExist(workspaces);
+			if (!workspacesExist) {
+				throw new Error('One or more workspaces do not exist');
+			}
+		}
 
 		const user = await prisma.user.create({
 			data: {
@@ -153,4 +169,15 @@ export async function updateWorkspace(data: { id: string; name: string }) {
 		console.error('Error updating workspace:', error);
 		throw error;
 	}
+}
+
+async function checkWorkspacesExist(workspaceIds: string[]): Promise<boolean> {
+	const existingWorkspaces = await prisma.workspace.findMany({
+		where: {
+			id: {
+				in: workspaceIds
+			}
+		}
+	});
+	return existingWorkspaces.length === workspaceIds.length;
 }

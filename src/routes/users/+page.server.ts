@@ -29,14 +29,17 @@ export const actions: Actions = {
 		try {
 			const userData = {
 				...form.data,
-				workspaces: formData.getAll('workspaces') as string[] // Getting workspace IDs
+				workspaces: JSON.parse(formData.get('workspaces') as string) // Getting workspace IDs
 			};
 
 			await createUser(userData);
 
 			return message(form, 'User created successfully');
-		} catch (error) {
+		} catch (error: any) {
 			console.error('Error creating user:', error);
+			if (error.message === 'One or more workspaces do not exist') {
+				return fail(400, { form, error: error.message });
+			}
 			return fail(500, { form, error: 'An error occurred while creating the user' });
 		}
 	},

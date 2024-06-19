@@ -76,6 +76,9 @@
 					<Table.Head>Admin</Table.Head>
 					<Table.Head>Float value</Table.Head>
 					<Table.Head>Birthday</Table.Head>
+					<Table.Head>Workspaces</Table.Head>
+					<Table.Head>Edit</Table.Head>
+					<Table.Head>Delete</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -88,6 +91,11 @@
 							<Table.Cell>{user.isAdmin}</Table.Cell>
 							<Table.Cell>{user.floatval}</Table.Cell>
 							<Table.Cell>{new Date(user.birthday).toLocaleDateString()}</Table.Cell>
+							<Table.Cell>
+								{#each user.workspaces as workspace}
+									<span>{workspace.name}</span><br />
+								{/each}
+							</Table.Cell>
 							<Table.Cell>
 								<UpdateForm
 									{data}
