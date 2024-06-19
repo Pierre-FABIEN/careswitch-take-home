@@ -6,11 +6,12 @@
 	import * as Popover from '$ui/popover';
 	import { Calendar } from '$ui/calendar';
 	import { buttonVariants } from '$ui/button';
+	import Checkbox from '$ui/checkbox/checkbox.svelte';
+	import { Button } from '$ui/button';
+	import { Label } from '$ui/label/index.js';
+	
 	import CalendarIcon from 'svelte-radix/Calendar.svelte';
 	import { cn } from '$lib/utils.js';
-	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
-	import { Button } from '$ui/button';
-	import { Label } from '$lib/components/ui/label/index.js';
 
 	// Importing date manipulation utilities from '@internationalized/date'
 	import {

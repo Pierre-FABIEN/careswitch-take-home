@@ -78,6 +78,8 @@
 				<Table.Row>
 					<Table.Head>Name</Table.Head>
 					<Table.Head>Users</Table.Head>
+					<Table.Head>Edit</Table.Head>
+					<Table.Head>Delete</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
