@@ -6,6 +6,7 @@
 	import TrashIcon from 'svelte-radix/Trash.svelte';
 
 	import UpdateForm from './UpdateForm.svelte';
+	import MessageHandler from '$components/MessageHandler.svelte';
 
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
@@ -23,7 +24,6 @@
 	} from '$lib/schemas/workspaces/workspaceUpdateSchema';
 
 	import CreateForm from './CreateForm.svelte';
-	import MessageHandler from '$components/MessageHandler.svelte';
 
 	export let data: {
 		workspaceCreateform: SuperValidated<Infer<WorkspaceCreateSchema>>;

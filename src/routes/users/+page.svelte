@@ -10,7 +10,6 @@
 	import TrashIcon from 'svelte-radix/Trash.svelte';
 
 	import UpdateForm from './UpdateForm.svelte';
-	import MessageSubmit from './MessageSubmit.svelte';
 
 	import { userCreateSchema, type UserCreateSchema } from '$lib/schemas/users/userCreateSchema';
 	import { userDeleteSchema, type UserDeleteSchema } from '$lib/schemas/users/userDeleteSchema';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { writable, get } from 'svelte/store';
+	import { writable } from 'svelte/store';
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
 	import { Input } from '$ui/input';
@@ -87,7 +87,9 @@
 	}
 
 	$: hiddenWorkspacesValue = JSON.stringify(
-		$updateUserData.workspaces.filter(({ checked }) => checked).map(({ id }) => id)
+		$updateUserData.workspaces
+			.filter(({ checked }: App.Workspace) => checked)
+			.map(({ id }: App.Workspace) => id)
 	);
 
 	$: hiddenIsAdminValue = $updateUserData.isAdmin ? 'true' : 'false';
