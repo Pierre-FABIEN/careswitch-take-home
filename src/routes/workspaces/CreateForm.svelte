@@ -1,7 +1,10 @@
 <script lang="ts">
+	// Importing writable store from Svelte for reactive state management
 	import { writable } from 'svelte/store';
+	// Importing Svelte lifecycle function to run code when the component is mounted
 	import { onMount } from 'svelte';
 
+	// Importing necessary components from various UI libraries
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
 	import { Input } from '$ui/input';
@@ -9,30 +12,38 @@
 	import { Checkbox } from '$ui/checkbox';
 	import { Label } from '$ui/label';
 
+	// Props to receive data and functions from parent component or route
 	export let data: any;
 	export let createWorkspaceMessage: any;
 	export let createWorkspaceData: any;
 	export let createWorkspaceEnhance: any;
 	export let createWorkspaceForm: any;
 
+	// Writable store to manage the state of the sheet (open or closed)
 	const isSheetOpen = writable(false);
 
-	let users: { id: string; name: string; checked: boolean }[] = [];
+	// Local state for users
+	let users: App.UserWithChecked[] = [];
 
+	// Function to run when the component is mounted
 	onMount(() => {
-		users = data.users.map((user: any) => ({
+		// Initialize users state with data from the prop
+		users = data.users.map((user: App.UserWithChecked) => ({
 			id: user.id,
 			name: user.name,
 			checked: false
 		}));
 	});
 
+	// Reactive statement to handle successful workspace creation message
 	$: if ($createWorkspaceMessage === 'Workspace created successfully') {
-		isSheetOpen.set(false);
+		isSheetOpen.set(false); // Close the sheet
 	}
 
+	// Reactive statement to update users data in createWorkspaceData prop
 	$: $createWorkspaceData.users = users.filter((user) => user.checked).map((user) => user.id);
 
+	// Reactive statement to update hidden input value for users
 	$: hiddenUsersValue = JSON.stringify($createWorkspaceData.users);
 </script>
 

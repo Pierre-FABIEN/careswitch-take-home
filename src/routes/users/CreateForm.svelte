@@ -1,4 +1,5 @@
 <script lang="ts">
+	// Importing necessary components and utilities from different UI libraries and local files
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
 	import { Input } from '$ui/input';
@@ -11,6 +12,7 @@
 	import { Button } from '$ui/button';
 	import { Label } from '$lib/components/ui/label/index.js';
 
+	// Importing date manipulation utilities from '@internationalized/date'
 	import {
 		DateFormatter,
 		type DateValue,
@@ -18,9 +20,12 @@
 		parseDate
 	} from '@internationalized/date';
 
+	// Svelte lifecycle function to run code when the component is mounted
 	import { onMount } from 'svelte';
+	// Importing writable store from Svelte for reactive state management
 	import { writable } from 'svelte/store';
 
+	// Props to receive data and functions from parent component or route
 	export let data: any;
 	export let createUserMessage: any;
 	export let createUserData: any;
@@ -28,20 +33,25 @@
 	export let createUserEnhance: any;
 	export let createUserForm: any;
 
-	let workspaces: { id: string; name: string; checked: boolean }[] = [];
+	// Local state for workspaces and sheet visibility
+	let workspaces: App.WorkspaceWithChecked[] = [];
 
+	// Writable store to manage the state of the sheet (open or closed)
 	const isSheetOpen = writable(false);
 
+	// DateFormatter instance to format dates in a specific locale (en-US)
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
 	});
 
+	// Parsing the birthday date if available in the createUserData prop
 	let birthdayValue: DateValue | undefined = $createUserData.birthday
 		? parseDate($createUserData.birthday)
 		: undefined;
 
+	// Function to run when the component is mounted
 	onMount(() => {
-		// Initialize workspaces state
+		// Initialize workspaces state with data from the prop
 		workspaces = data.workspaces.map((workspace: any) => ({
 			id: workspace.id,
 			name: workspace.name,
@@ -49,16 +59,19 @@
 		}));
 	});
 
+	// Reactive statement to reset state when a user is successfully created
 	$: if ($createUserMessage === 'User created successfully') {
-		isSheetOpen.set(false);
-		birthdayValue = undefined;
-		$createUserData.birthday = '';
+		isSheetOpen.set(false); // Close the sheet
+		birthdayValue = undefined; // Reset birthday value
+		$createUserData.birthday = ''; // Clear birthday data
 	}
 
+	// Reactive statement to update workspaces data in createUserData prop
 	$: $createUserData.workspaces = workspaces
 		.filter((workspace) => workspace.checked)
 		.map((workspace) => workspace.id);
 
+	// Reactive statement to update hidden input value for workspaces
 	$: hiddenWorkspacesValue = JSON.stringify($createUserData.workspaces);
 </script>
 

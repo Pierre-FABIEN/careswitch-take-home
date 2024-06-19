@@ -1,7 +1,10 @@
 <script lang="ts">
+	// Importing writable store from Svelte for reactive state management
 	import { writable } from 'svelte/store';
+	// Importing Svelte lifecycle function to run code when the component is mounted
 	import { onMount } from 'svelte';
 
+	// Importing necessary components from various UI libraries
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
@@ -10,32 +13,40 @@
 	import { Checkbox } from '$ui/checkbox';
 	import { Label } from '$ui/label';
 
+	// Props to receive data and functions from parent component or route
 	export let data: any;
-	export let workspace: any;
+	export let workspace: App.Workspace;
 	export let updateWorkspaceMessage: any;
 	export let updateWorkspaceData: any;
 	export let updateWorkspaceEnhance: any;
 	export let updateWorkspaceForm: any;
 
+	// Local state to manage the visibility of the sheet
 	let isSheetOpen = false;
 
+	// Function to open the sheet
 	const clickOpenSheet = () => {
 		isSheetOpen = true;
 	};
 
+	// Function to update workspace details in the local state
 	const updateWorkspaceDetails = () => {
-		const workspaceUserIds = new Set(workspace.users.map((user: any) => user.id));
-		const allUsers = data.users.map((user: any) => ({
+		// Create a set of user IDs from the workspace data
+		const workspaceUserIds = new Set(workspace.users.map((user: App.User) => user.id));
+		// Map over all users, setting the checked property based on the workspace's users
+		const allUsers = data.users.map((user: App.User) => ({
 			...user,
 			checked: workspaceUserIds.has(user.id)
 		}));
 
+		// Set the updateWorkspaceData store with updated values
 		updateWorkspaceData.set({
 			name: workspace.name,
 			users: allUsers
 		});
 	};
 
+	// Writable store to manage workspace data reactively
 	const workspaceData = writable({
 		name: '',
 		email: '',
@@ -45,16 +56,20 @@
 		birthday: ''
 	});
 
+	// On component mount, update workspace details
 	onMount(() => {
 		updateWorkspaceDetails();
 	});
 
+	// Reactive statement to bind workspaceData to updateWorkspaceData prop
 	$: updateWorkspaceData = workspaceData;
 
+	// Reactive statement to handle successful workspace update message
 	$: if ($updateWorkspaceMessage === 'Workspace updated successfully') {
-		isSheetOpen = false;
+		isSheetOpen = false; // Close the sheet
 	}
 
+	// Reactive statement to update workspace details when the workspace prop changes
 	$: if (workspace) {
 		updateWorkspaceDetails();
 	}

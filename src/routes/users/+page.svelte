@@ -20,8 +20,8 @@
 		userCreateform: SuperValidated<Infer<UserCreateSchema>>;
 		userDeleteform: SuperValidated<Infer<UserDeleteSchema>>;
 		userUpdateSchema: SuperValidated<Infer<UserUpdateSchema>>;
-		workspaces: any[];
-		users: any[];
+		workspaces: App.Workspace[];
+		users: App.User[];
 	};
 
 	const createUserForm = superForm(data.userCreateform, {
@@ -54,10 +54,6 @@
 	} = updateUserForm;
 
 	const { enhance: deleteUserEnhance, message: deleteUserMessage } = deleteUserForm;
-
-	onMount(() => {
-		console.log(data);
-	});
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">

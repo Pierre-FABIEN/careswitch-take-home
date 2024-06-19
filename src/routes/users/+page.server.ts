@@ -26,7 +26,7 @@ export const actions: Actions = {
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			const userData = {
+			const userData: App.UserCreateSchema = {
 				...form.data,
 				workspaces: JSON.parse(formData.get('workspaces') as string)
 			};
@@ -68,7 +68,7 @@ export const actions: Actions = {
 			const workspacesString = formData.get('workspaces') as string;
 			const workspaces = JSON.parse(workspacesString);
 
-			const userData = {
+			const userData: App.UserUpdateSchema = {
 				id: formData.get('id') as string,
 				name: formData.get('name') as string,
 				email: formData.get('email') as string,

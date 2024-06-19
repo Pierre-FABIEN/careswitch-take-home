@@ -1,5 +1,6 @@
 import prisma from './db';
 
+// Fetch all workspaces along with their users
 export async function getWorkspaces() {
 	const workspaces = await prisma.workspace.findMany({
 		include: {
@@ -20,7 +21,8 @@ export async function getWorkspaces() {
 	}));
 }
 
-export async function createWorkspace(data: { name: string; users: string[] }) {
+// Create a new workspace
+export async function createWorkspace(data: App.WorkspaceInputData) {
 	try {
 		const workspace = await prisma.workspace.create({
 			data: {
@@ -39,6 +41,7 @@ export async function createWorkspace(data: { name: string; users: string[] }) {
 	}
 }
 
+// Delete a workspace by ID
 export async function deleteWorkspace(id: string) {
 	try {
 		// Supprimer les enregistrements dans UserWorkspace associés au Workspace
@@ -56,7 +59,8 @@ export async function deleteWorkspace(id: string) {
 	}
 }
 
-export async function updateWorkspace(data) {
+// Update an existing workspace
+export async function updateWorkspace(data: App.WorkspaceInputData & { id: string }) {
 	try {
 		const workspace = await prisma.workspace.update({
 			where: { id: data.id },
@@ -64,7 +68,7 @@ export async function updateWorkspace(data) {
 				name: data.name,
 				users: {
 					deleteMany: {}, // Clear existing users
-					create: data.users.map((userId: string) => ({
+					create: data.users.map((userId) => ({
 						user: { connect: { id: userId } }
 					}))
 				}

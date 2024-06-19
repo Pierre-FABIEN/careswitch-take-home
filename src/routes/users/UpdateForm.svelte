@@ -1,4 +1,5 @@
 <script lang="ts">
+	// Importing necessary Svelte store and components from various UI libraries and local files
 	import { writable } from 'svelte/store';
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
@@ -12,28 +13,35 @@
 	import CalendarIcon from 'svelte-radix/Calendar.svelte';
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 	import { cn } from '$lib/utils.js';
+
+	// Importing date manipulation utilities from '@internationalized/date'
 	import {
 		DateFormatter,
 		type DateValue,
 		getLocalTimeZone,
 		parseDate
 	} from '@internationalized/date';
+
+	// Importing Svelte lifecycle function to run code when the component is mounted
 	import { onMount } from 'svelte';
 
+	// Props to receive data and functions from parent component or route
 	export let data: any;
-	export let user: any;
+	export let user: App.User;
 	export let updateUserMessage: any;
 	export let updateUserData: any;
 	export let updateUserValidate: any;
 	export let updateUserEnhance: any;
 	export let updateUserForm: any;
 
+	// Local state to manage the visibility of the sheet
 	let isSheetOpen = false;
 
+	// Local state variables for hidden input values
 	let hiddenWorkspacesValue: string;
-
 	let hiddenIsAdminValue: string;
 
+	// Writable store to manage user data reactively
 	const userData = writable({
 		name: '',
 		email: '',
@@ -44,16 +52,21 @@
 		workspaces: [] as App.Workspace[]
 	});
 
+	// DateFormatter instance to format dates in a specific locale (en-US)
 	const df = new DateFormatter('en-US', { dateStyle: 'long' });
 	let birthdayValue: DateValue | undefined = undefined;
 
+	// Function to update user details in the local state
 	const updateUserDetails = () => {
+		// Create a set of workspace IDs from the user data
 		const userWorkspacesIds = new Set(user.workspaces.map((ws: any) => ws.id));
+		// Map over all workspaces, setting the checked property based on the user's workspaces
 		const allWorkspaces = data.workspaces.map((ws: any) => ({
 			...ws,
 			checked: userWorkspacesIds.has(ws.id)
 		}));
 
+		// Set the userData store with updated values
 		userData.set({
 			name: user.name,
 			email: user.email,
@@ -63,35 +76,43 @@
 			birthday: user.birthday,
 			workspaces: allWorkspaces
 		});
+		// Parse the user's birthday if it exists
 		birthdayValue = user.birthday ? parseDate(user.birthday.substring(0, 10)) : undefined;
 	};
 
+	// Function to open the sheet
 	const clickOpenSheet = () => {
 		isSheetOpen = true;
 	};
 
+	// On component mount, update user details
 	onMount(() => {
 		updateUserDetails();
 	});
 
+	// Reactive statement to bind userData to updateUserData prop
 	$: updateUserData = userData;
 
+	// Reactive statement to handle successful user update message
 	$: if ($updateUserMessage === 'User updated successfully') {
-		isSheetOpen = false;
+		isSheetOpen = false; // Close the sheet
 		birthdayValue = undefined; // Reset the date value
 		$updateUserData.birthday = ''; // Clear the form data
 	}
 
+	// Reactive statement to update user details when the user prop changes
 	$: if (user) {
 		updateUserDetails();
 	}
 
+	// Reactive statement to update hidden workspaces input value
 	$: hiddenWorkspacesValue = JSON.stringify(
 		$updateUserData.workspaces
-			.filter(({ checked }: App.Workspace) => checked)
-			.map(({ id }: App.Workspace) => id)
+			.filter(({ checked }: App.WorkspaceWithChecked) => checked)
+			.map(({ id }: App.WorkspaceWithChecked) => id)
 	);
 
+	// Reactive statement to update hidden admin status input value
 	$: hiddenIsAdminValue = $updateUserData.isAdmin ? 'true' : 'false';
 </script>
 
@@ -204,7 +225,6 @@
 				</Form.Field>
 			</div>
 
-			<!-- Workspaces -->
 			<div>
 				<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">Workspaces</h4>
 				{#if $updateUserData.workspaces.length > 0}
@@ -229,7 +249,6 @@
 				{/if}
 			</div>
 
-			<!-- Champs cachés pour envoyer les valeurs -->
 			<input type="hidden" name="workspaces" bind:value={hiddenWorkspacesValue} />
 
 			<Button type="submit" variant="outline">Submit</Button>

@@ -32,9 +32,9 @@ export const actions: Actions = {
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			const data = {
+			const data: App.WorkspaceCreateSchema = {
 				...form.data,
-				users: JSON.parse(formData.get('users') as string) // Getting workspace IDs
+				users: JSON.parse(formData.get('users') as string) // Getting user IDs
 			};
 
 			await createWorkspace(data);
@@ -64,7 +64,6 @@ export const actions: Actions = {
 	},
 	update: async ({ request }) => {
 		const formData = await request.formData();
-		console.log(formData);
 
 		const form = await superValidate(formData, zod(workspaceUpdateSchema));
 
@@ -74,7 +73,7 @@ export const actions: Actions = {
 		}
 
 		try {
-			const data = {
+			const data: App.WorkspaceUpdateSchema = {
 				id: formData.get('id') as string,
 				name: formData.get('name') as string,
 				users: JSON.parse(formData.get('users') as string)
