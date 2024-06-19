@@ -68,10 +68,20 @@ export async function updateUser(data: {
 	isAdmin: boolean;
 	floatval: number;
 	birthday: string;
-	workspaces?: string[]; // Array of workspace IDs
+	workspaces?: string; // Workspaces as a string in the format '[id1,id2,...]'
 }) {
 	try {
 		const { id, workspaces, ...userData } = data;
+
+		// Parse workspaces string into an array
+		let workspaceArray: string[] = [];
+		if (workspaces) {
+			workspaceArray = JSON.parse(workspaces);
+			const workspacesExist = await checkWorkspacesExist(workspaceArray);
+			if (!workspacesExist) {
+				throw new Error('One or more workspaces do not exist');
+			}
+		}
 
 		// Update user data and manage workspace relations
 		const user = await prisma.user.update({
@@ -80,10 +90,9 @@ export async function updateUser(data: {
 				...userData,
 				workspaces: {
 					deleteMany: {},
-					create:
-						workspaces?.map((workspaceId) => ({
-							workspace: { connect: { id: workspaceId } }
-						})) || []
+					create: workspaceArray.map((workspaceId) => ({
+						workspace: { connect: { id: workspaceId } }
+					}))
 				}
 			}
 		});

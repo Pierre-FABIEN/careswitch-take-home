@@ -64,9 +64,6 @@
 
 	const { enhance: deleteWorkspaceEnhance, message: deleteWorkspaceMessage } = deleteWorkspaceForm;
 
-	onMount(() => {
-		console.log(data);
-	});
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">

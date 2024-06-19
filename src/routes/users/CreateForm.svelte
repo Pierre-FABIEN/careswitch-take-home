@@ -45,7 +45,6 @@
 	}
 
 	onMount(() => {
-		console.log(data);
 		// Initialize workspaces state
 		workspaces = data.workspaces.map((workspace: any) => ({
 			id: workspace.id,

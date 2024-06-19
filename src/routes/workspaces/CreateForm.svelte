@@ -18,8 +18,6 @@
 	$: if ($createWorkspaceMessage === 'Workspace created successfully') {
 		isSheetOpen.set(false);
 	}
-
-	$: console.log($createWorkspaceMessage);
 </script>
 
 <Sheet.Root open={$isSheetOpen}>

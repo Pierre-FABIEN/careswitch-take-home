@@ -6,11 +6,12 @@ export const userUpdateSchema = z.object({
 	// email: z.string().email('Invalid email'),
 	// integer: z.number(),
 	// isAdmin: z.boolean(),
-	// floatval: z.number()
+	// floatval: z.number(),
 	// birthday: z
 	// 	.string()
 	// 	.datetime()
-	// 	.refine((date) => date !== undefined, 'Please select a valid date.')
+	// 	.refine((date) => date !== undefined, 'Please select a valid date.'),
+	// workspaces: z.array(z.string()).optional()
 });
 
 export type UserUpdateSchema = typeof userUpdateSchema;

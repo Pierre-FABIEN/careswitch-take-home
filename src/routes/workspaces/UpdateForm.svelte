@@ -45,10 +45,6 @@
 		updateWorkspaceDetails();
 	}
 
-	const test = async () => {
-		console.log('Form data:', $updateWorkspaceData);
-	};
-
 	const clickOpenSheet = () => {
 		isSheetOpen = true;
 	};
@@ -77,7 +73,7 @@
 				</Form.Field>
 			</div>
 
-			<Button type="submit" variant="outline" on:click={test}>Submit</Button>
+			<Button type="submit" variant="outline">Submit</Button>
 		</form>
 	</Sheet.Content>
 </Sheet.Root>

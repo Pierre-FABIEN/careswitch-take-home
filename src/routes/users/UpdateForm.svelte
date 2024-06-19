@@ -1,17 +1,17 @@
 <script lang="ts">
+	import { writable, get } from 'svelte/store';
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
 	import { Input } from '$ui/input';
 	import * as Popover from '$ui/popover';
 	import { Calendar } from '$ui/calendar';
+	import Checkbox from '$ui/checkbox/checkbox.svelte';
 	import { buttonVariants } from '$ui/button';
-	import CalendarIcon from 'svelte-radix/Calendar.svelte';
-	import { cn } from '$lib/utils.js';
-	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
 	import { Button } from '$ui/button';
-	import { writable } from 'svelte/store';
 	import { Label } from '$ui/label/index.js';
-
+	import CalendarIcon from 'svelte-radix/Calendar.svelte';
+	import PencilIcon from 'svelte-radix/Pencil1.svelte';
+	import { cn } from '$lib/utils.js';
 	import {
 		DateFormatter,
 		type DateValue,
@@ -19,7 +19,6 @@
 		parseDate
 	} from '@internationalized/date';
 	import { onMount } from 'svelte';
-	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 
 	export let data: any;
 	export let user: any;
@@ -30,30 +29,38 @@
 	export let updateUserForm: any;
 	let isSheetOpen = false;
 
+	// Initialisation des données utilisateur avec writable
 	const userData = writable({
 		name: '',
 		email: '',
 		integer: 0,
 		isAdmin: false,
 		floatval: 0.0,
-		birthday: ''
+		birthday: '',
+		workspaces: []
 	});
 	$: updateUserData = userData;
 
-	const df = new DateFormatter('en-US', {
-		dateStyle: 'long'
-	});
-
+	const df = new DateFormatter('en-US', { dateStyle: 'long' });
 	let birthdayValue: DateValue | undefined = undefined;
 
 	// Fonction pour mettre à jour les détails de l'utilisateur
 	const updateUserDetails = () => {
-		$updateUserData.name = user.name;
-		$updateUserData.email = user.email;
-		$updateUserData.integer = user.integer;
-		$updateUserData.isAdmin = user.isAdmin;
-		$updateUserData.floatval = user.floatval;
-		$updateUserData.birthday = user.birthday;
+		const userWorkspacesIds = new Set(user.workspaces.map((ws: any) => ws.id));
+		const allWorkspaces = data.workspaces.map((ws: any) => ({
+			...ws,
+			checked: userWorkspacesIds.has(ws.id)
+		}));
+
+		userData.set({
+			name: user.name,
+			email: user.email,
+			integer: user.integer,
+			isAdmin: user.isAdmin,
+			floatval: user.floatval,
+			birthday: user.birthday,
+			workspaces: allWorkspaces
+		});
 		birthdayValue = user.birthday ? parseDate(user.birthday.substring(0, 10)) : undefined;
 	};
 
@@ -74,13 +81,22 @@
 		updateUserDetails();
 	}
 
-	const test = async () => {
-		console.log('Form data:', $updateUserData);
-	};
-
 	const clickOpenSheet = () => {
 		isSheetOpen = true;
 	};
+
+	// Mettre à jour les workspaces avec seulement les identifiants
+	$: $updateUserData.workspaces = get(userData)
+		.workspaces.filter(({ checked }: { checked: boolean }) => checked)
+		.map(({ id }: { id: string }) => id);
+
+	let hiddenWorkspacesValue: string;
+	$: hiddenWorkspacesValue =
+		'[' + $updateUserData.workspaces.map(({ id }: { id: string }) => `"${id}"`).join(',') + ']';
+
+	// Ajouter un champ caché pour isAdmin
+	let hiddenIsAdminValue: string;
+	$: hiddenIsAdminValue = $updateUserData.isAdmin ? 'true' : 'false';
 </script>
 
 <Sheet.Root open={isSheetOpen}>
@@ -132,6 +148,7 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
+			<input type="hidden" name="isAdmin" bind:value={hiddenIsAdminValue} />
 
 			<div>
 				<Form.Field name="floatval" form={updateUserForm}>
@@ -190,13 +207,19 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
+
+			<!-- Workspaces -->
 			<div>
-				{#each data.workspaces as workspace}
+				{#each $updateUserData.workspaces as workspace, index}
 					<div class="my-3 flex items-center space-x-2">
-						<Checkbox id="terms" aria-labelledby="terms-label" />
+						<Checkbox
+							id="workspace-{workspace.id}"
+							aria-labelledby="workspace-label-{workspace.id}"
+							bind:checked={$updateUserData.workspaces[index].checked}
+						/>
 						<Label
-							id="terms-label"
-							for="terms"
+							id="workspace-label-{workspace.id}"
+							for="workspace-{workspace.id}"
 							class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 						>
 							{workspace.name}
@@ -204,7 +227,11 @@
 					</div>
 				{/each}
 			</div>
-			<Button type="submit" variant="outline" on:click={test}>Submit</Button>
+
+			<!-- Champs cachés pour envoyer les valeurs -->
+			<input type="hidden" name="workspaces" bind:value={hiddenWorkspacesValue} />
+
+			<Button type="submit" variant="outline">Submit</Button>
 		</form>
 	</Sheet.Content>
 </Sheet.Root>

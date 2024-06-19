@@ -34,7 +34,6 @@ export const actions: Actions = {
 	},
 	delete: async ({ request }) => {
 		const formData = await request.formData();
-		console.log(formData, 'formData');
 
 		const id: FormDataEntryValue | null = formData.get('id');
 		const form = await superValidate(formData, zod(workspaceDeleteSchema));
@@ -43,7 +42,6 @@ export const actions: Actions = {
 
 		try {
 			await deleteWorkspace(id as string);
-			console.log('workspace ID deleted:', id); // Log for debugging
 
 			return message(form, 'Workspace deleted successfully');
 		} catch (error) {
