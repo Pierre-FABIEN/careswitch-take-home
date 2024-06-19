@@ -20,14 +20,61 @@ export async function createUser(data: {
 	isAdmin: boolean;
 	floatval: number;
 	birthday: string;
+	workspaces?: string[]; // Array of workspace IDs
 }) {
 	try {
+		const { workspaces, ...userData } = data;
+
 		const user = await prisma.user.create({
-			data
+			data: {
+				...userData,
+				workspaces: {
+					create:
+						workspaces?.map((workspaceId) => ({
+							workspace: { connect: { id: workspaceId } }
+						})) || []
+				}
+			}
 		});
+
 		return user;
 	} catch (error) {
 		console.error('Error creating user:', error);
+		throw error;
+	}
+}
+
+export async function updateUser(data: {
+	id: string;
+	name: string;
+	email: string;
+	integer: number;
+	isAdmin: boolean;
+	floatval: number;
+	birthday: string;
+	workspaces?: string[]; // Array of workspace IDs
+}) {
+	try {
+		const { id, workspaces, ...userData } = data;
+
+		// Update user data and manage workspace relations
+		const user = await prisma.user.update({
+			where: { id },
+			data: {
+				...userData,
+				workspaces: {
+					deleteMany: {},
+					create:
+						workspaces?.map((workspaceId) => ({
+							workspace: { connect: { id: workspaceId } }
+						})) || []
+				}
+			}
+		});
+
+		return user;
+	} catch (error) {
+		console.error('Error updating user:', error);
 		throw error;
 	}
 }
@@ -46,36 +93,6 @@ export async function deleteUser(userId: string) {
 	} catch (error) {
 		console.error('Error deleting user:', error);
 		throw new Error('Could not delete user');
-	}
-}
-
-export async function updateUser(data: {
-	id: string;
-	name: string;
-	email: string;
-	integer: number;
-	isAdmin: boolean;
-	floatval: number;
-	birthday: string;
-}) {
-	try {
-		console.log('data from', data);
-		const user = await prisma.user.update({
-			where: { id: data.id },
-			data: {
-				name: data.name,
-				email: data.email,
-				integer: data.integer,
-				isAdmin: data.isAdmin,
-				floatval: data.floatval,
-				birthday: data.birthday
-			}
-		});
-
-		return user;
-	} catch (error) {
-		console.error('Error updating user:', error);
-		throw error;
 	}
 }
 

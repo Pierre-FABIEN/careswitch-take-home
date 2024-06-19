@@ -20,12 +20,19 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	create: async ({ request }) => {
 		const formData = await request.formData();
+		console.log('formDatawsegswg', formData);
+
 		const form = await superValidate(formData, zod(userCreateSchema));
 
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			await createUser(form.data);
+			const userData = {
+				...form.data,
+				workspaces: formData.getAll('workspaces') as string[] // Getting workspace IDs
+			};
+
+			await createUser(userData);
 
 			return message(form, 'User created successfully');
 		} catch (error) {
@@ -35,8 +42,6 @@ export const actions: Actions = {
 	},
 	delete: async ({ request }) => {
 		const formData = await request.formData();
-		console.log(formData, 'formData');
-
 		const id: FormDataEntryValue | null = formData.get('id');
 		const form = await superValidate(formData, zod(userDeleteSchema));
 
@@ -44,8 +49,6 @@ export const actions: Actions = {
 
 		try {
 			await deleteUser(id as string);
-			console.log('User ID deleted:', id); // Log for debugging
-
 			return message(form, 'User deleted successfully');
 		} catch (error) {
 			console.error('Error deleting user:', error);
@@ -54,29 +57,26 @@ export const actions: Actions = {
 	},
 	update: async ({ request }) => {
 		const formData = await request.formData();
-
 		const form = await superValidate(formData, zod(userUpdateSchema));
 
-		if (!form.valid) {
-			console.error('Form validation failed:', form); // Log form validation errors
-			return fail(400, { form });
-		}
+		if (!form.valid) return fail(400, { form });
 
 		try {
-			const data = {
+			const userData = {
 				id: formData.get('id') as string,
 				name: formData.get('name') as string,
 				email: formData.get('email') as string,
-				integer: parseInt(formData.get('integer') as string, 10), // Convert to integer
-				isAdmin: formData.get('isAdmin') === 'true', // Convert to boolean
-				floatval: parseFloat(formData.get('floatval') as string), // Convert to float
-				birthday: formData.get('birthday') as string
+				integer: parseInt(formData.get('integer') as string, 10),
+				isAdmin: formData.get('isAdmin') === 'true',
+				floatval: parseFloat(formData.get('floatval') as string),
+				birthday: formData.get('birthday') as string,
+				workspaces: formData.getAll('workspaces') as string[] // Getting workspace IDs
 			};
 
-			await updateUser(data);
+			await updateUser(userData);
 			return message(form, 'User updated successfully');
 		} catch (error) {
-			console.error('Error updating user:', error); // Improved error logging
+			console.error('Error updating user:', error);
 			return fail(500, { form, error: 'An error occurred while updating the user' });
 		}
 	}

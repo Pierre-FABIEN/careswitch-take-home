@@ -9,6 +9,7 @@
 	import { cn } from '$lib/utils.js';
 	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
 	import { Button } from '$ui/button';
+	import { Label } from '$lib/components/ui/label/index.js';
 
 	import {
 		DateFormatter,
@@ -16,7 +17,9 @@
 		getLocalTimeZone,
 		parseDate
 	} from '@internationalized/date';
+	import { onMount } from 'svelte';
 
+	export let data: any;
 	export let createUserMessage: any;
 	export let createUserData: any;
 	export let createUserValidate: any;
@@ -37,6 +40,24 @@
 		birthdayValue = undefined;
 		$createUserData.birthday = '';
 	}
+
+	onMount(() => {
+		console.log(data);
+		// Initialize workspaces state
+		workspaces = data.workspaces.map((workspace: any) => ({
+			id: workspace.id,
+			name: workspace.name,
+			checked: false
+		}));
+	});
+
+	let workspaces: { id: string; name: string; checked: boolean }[] = [];
+
+	$: $createUserData.workspaces = workspaces
+		.filter((workspace) => workspace.checked)
+		.map((workspace) => workspace.id);
+
+	$: console.log('wsegsewgswge', $createUserData);
 </script>
 
 <Sheet.Root open={isSheetOpen}>
@@ -147,6 +168,27 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
+
+			<div>
+				<Form.Field name="workspaces" form={createUserForm}>
+					<Form.Control let:attrs>
+						<Form.Label>Workspaces</Form.Label>
+						{#each workspaces as workspace (workspace.id)}
+							<div class="my-3 flex items-center space-x-2">
+								<Checkbox id={workspace.id} bind:checked={workspace.checked} />
+								<Label
+									for={workspace.id}
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+								>
+									{workspace.name}
+								</Label>
+							</div>
+						{/each}
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+			</div>
+			<input type="hidden" name="workspaces" bind:value={$createUserData.workspaces} />
 			<Button type="submit" variant="outline">Submit</Button>
 		</form>
 	</Sheet.Content>

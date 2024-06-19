@@ -10,6 +10,7 @@
 	import Checkbox from '$components/ui/checkbox/checkbox.svelte';
 	import { Button } from '$ui/button';
 	import { writable } from 'svelte/store';
+	import { Label } from '$ui/label/index.js';
 
 	import {
 		DateFormatter,
@@ -20,6 +21,7 @@
 	import { onMount } from 'svelte';
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 
+	export let data: any;
 	export let user: any;
 	export let updateUserMessage: any;
 	export let updateUserData: any;
@@ -187,6 +189,20 @@
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>
+			</div>
+			<div>
+				{#each data.workspaces as workspace}
+					<div class="my-3 flex items-center space-x-2">
+						<Checkbox id="terms" aria-labelledby="terms-label" />
+						<Label
+							id="terms-label"
+							for="terms"
+							class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+						>
+							{workspace.name}
+						</Label>
+					</div>
+				{/each}
 			</div>
 			<Button type="submit" variant="outline" on:click={test}>Submit</Button>
 		</form>

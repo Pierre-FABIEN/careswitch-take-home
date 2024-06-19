@@ -19,6 +19,7 @@
 		userCreateform: SuperValidated<Infer<UserCreateSchema>>;
 		userDeleteform: SuperValidated<Infer<UserDeleteSchema>>;
 		userUpdateSchema: SuperValidated<Infer<UserUpdateSchema>>;
+		workspaces: any[];
 		users: any[];
 	};
 
@@ -52,12 +53,12 @@
 	} = updateUserForm;
 
 	const { enhance: deleteUserEnhance, message: deleteUserMessage } = deleteUserForm;
-
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
 	<div class="mb-4 flex justify-end">
 		<CreateForm
+			{data}
 			{createUserMessage}
 			{createUserData}
 			{createUserValidate}
@@ -89,6 +90,7 @@
 							<Table.Cell>{new Date(user.birthday).toLocaleDateString()}</Table.Cell>
 							<Table.Cell>
 								<UpdateForm
+									{data}
 									{user}
 									{updateUserMessage}
 									{updateUserData}

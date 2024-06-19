@@ -9,7 +9,8 @@ export const userCreateSchema = z.object({
 	birthday: z
 		.string()
 		.datetime()
-		.refine((date) => date !== undefined, 'Please select a valid date.')
+		.refine((date) => date !== undefined, 'Please select a valid date.'),
+	workspaces: z.array(z.string()).optional()
 });
 
 export type UserCreateSchema = typeof userCreateSchema;
