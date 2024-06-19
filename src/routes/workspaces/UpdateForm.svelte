@@ -86,22 +86,25 @@
 				</Form.Field>
 			</div>
 
-			<!-- Users -->
 			<div>
+				<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">Users</h4>
 				<Form.Field name="users" form={updateWorkspaceForm}>
 					<Form.Control let:attrs>
-						<Form.Label>Users</Form.Label>
-						{#each $updateWorkspaceData.users as user (user.id)}
-							<div class="my-3 flex items-center space-x-2">
-								<Checkbox id="user-{user.id}" bind:checked={user.checked} />
-								<Label
-									for="user-{user.id}"
-									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-								>
-									{user.name}
-								</Label>
-							</div>
-						{/each}
+						{#if $updateWorkspaceData.users.length > 0}
+							{#each $updateWorkspaceData.users as user (user.id)}
+								<div class="my-3 flex items-center space-x-2">
+									<Checkbox id="user-{user.id}" bind:checked={user.checked} />
+									<Label
+										for="user-{user.id}"
+										class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+									>
+										{user.name}
+									</Label>
+								</div>
+							{/each}
+						{:else}
+							<p>No users found.</p>
+						{/if}
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>

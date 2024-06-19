@@ -24,7 +24,6 @@
 	} from '$lib/schemas/workspaces/workspaceUpdateSchema';
 
 	import CreateForm from './CreateForm.svelte';
-	import { onMount } from 'svelte';
 
 	export let data: {
 		workspaceCreateform: SuperValidated<Infer<WorkspaceCreateSchema>>;
@@ -82,7 +81,7 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{#if data.workspaces && Array.isArray(data.workspaces)}
+				{#if data.workspaces && Array.isArray(data.workspaces) && data.workspaces.length > 0}
 					{#each data.workspaces as workspace (workspace.id)}
 						<Table.Row>
 							<Table.Cell>{workspace.name}</Table.Cell>
@@ -110,9 +109,7 @@
 						</Table.Row>
 					{/each}
 				{:else}
-					<Table.Row>
-						<Table.Cell class="text-center">No users found.</Table.Cell>
-					</Table.Row>
+					<div class="my-5 text-lg font-semibold">No workspaces found.</div>
 				{/if}
 			</Table.Body>
 		</Table.Root>

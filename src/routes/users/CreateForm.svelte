@@ -172,20 +172,24 @@
 			</div>
 
 			<div>
+				<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">Workspaces</h4>
 				<Form.Field name="workspaces" form={createUserForm}>
 					<Form.Control let:attrs>
-						<Form.Label>Workspaces</Form.Label>
-						{#each workspaces as workspace (workspace.id)}
-							<div class="my-3 flex items-center space-x-2">
-								<Checkbox id={workspace.id} bind:checked={workspace.checked} />
-								<Label
-									for={workspace.id}
-									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-								>
-									{workspace.name}
-								</Label>
-							</div>
-						{/each}
+						{#if workspaces.length > 0}
+							{#each workspaces as workspace (workspace.id)}
+								<div class="my-3 flex items-center space-x-2">
+									<Checkbox id={workspace.id} bind:checked={workspace.checked} />
+									<Label
+										for={workspace.id}
+										class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+									>
+										{workspace.name}
+									</Label>
+								</div>
+							{/each}
+						{:else}
+							<p>No workspaces found.</p>
+						{/if}
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>

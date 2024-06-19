@@ -61,20 +61,24 @@
 			</div>
 
 			<div>
+				<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">Users</h4>
 				<Form.Field name="users" form={createWorkspaceForm}>
 					<Form.Control let:attrs>
-						<Form.Label>Users</Form.Label>
-						{#each users as user (user.id)}
-							<div class="my-3 flex items-center space-x-2">
-								<Checkbox id={user.id} bind:checked={user.checked} />
-								<Label
-									for={user.id}
-									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-								>
-									{user.name}
-								</Label>
-							</div>
-						{/each}
+						{#if users.length > 0}
+							{#each users as user (user.id)}
+								<div class="my-3 flex items-center space-x-2">
+									<Checkbox id={user.id} bind:checked={user.checked} />
+									<Label
+										for={user.id}
+										class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+									>
+										{user.name}
+									</Label>
+								</div>
+							{/each}
+						{:else}
+							<p>No users found.</p>
+						{/if}
 					</Form.Control>
 					<Form.FieldErrors />
 				</Form.Field>

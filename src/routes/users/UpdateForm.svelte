@@ -206,22 +206,27 @@
 
 			<!-- Workspaces -->
 			<div>
-				{#each $updateUserData.workspaces as workspace, index}
-					<div class="my-3 flex items-center space-x-2">
-						<Checkbox
-							id="workspace-{workspace.id}"
-							aria-labelledby="workspace-label-{workspace.id}"
-							bind:checked={$updateUserData.workspaces[index].checked}
-						/>
-						<Label
-							id="workspace-label-{workspace.id}"
-							for="workspace-{workspace.id}"
-							class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-						>
-							{workspace.name}
-						</Label>
-					</div>
-				{/each}
+				<h4 class="scroll-m-20 text-xl font-semibold tracking-tight">Workspaces</h4>
+				{#if $updateUserData.workspaces.length > 0}
+					{#each $updateUserData.workspaces as workspace, index}
+						<div class="my-3 flex items-center space-x-2">
+							<Checkbox
+								id="workspace-{workspace.id}"
+								aria-labelledby="workspace-label-{workspace.id}"
+								bind:checked={$updateUserData.workspaces[index].checked}
+							/>
+							<Label
+								id="workspace-label-{workspace.id}"
+								for="workspace-{workspace.id}"
+								class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+							>
+								{workspace.name}
+							</Label>
+						</div>
+					{/each}
+				{:else}
+					<p>No workspaces found.</p>
+				{/if}
 			</div>
 
 			<!-- Champs cachés pour envoyer les valeurs -->

@@ -1,5 +1,6 @@
 import prisma from './db';
 
+// Fetch all users along with their workspaces
 export async function getUsers() {
 	const users = await prisma.user.findMany({
 		include: {
@@ -17,15 +18,8 @@ export async function getUsers() {
 	}));
 }
 
-export async function createUser(data: {
-	name: string;
-	email: string;
-	integer: number;
-	isAdmin: boolean;
-	floatval: number;
-	birthday: string;
-	workspaces?: string[]; // Array of workspace IDs
-}) {
+// Create a new user
+export async function createUser(data: App.UserInputData) {
 	try {
 		const { workspaces, ...userData } = data;
 
@@ -55,20 +49,11 @@ export async function createUser(data: {
 	}
 }
 
-export async function updateUser(data: {
-	id: string;
-	name: string;
-	email: string;
-	integer: number;
-	isAdmin: boolean;
-	floatval: number;
-	birthday: string;
-	workspaces?: string[];
-}) {
+// Update an existing user
+export async function updateUser(data: App.UserInputData & { id: string }) {
 	try {
 		const { id, workspaces, ...userData } = data;
 
-		// Vérifier si les workspaces existent
 		if (workspaces && workspaces.length > 0) {
 			const workspacesExist = await checkWorkspacesExist(workspaces);
 			if (!workspacesExist) {
@@ -76,7 +61,6 @@ export async function updateUser(data: {
 			}
 		}
 
-		// Mettre à jour les données de l'utilisateur et gérer les relations avec les workspaces
 		const user = await prisma.user.update({
 			where: { id },
 			data: {
@@ -98,14 +82,13 @@ export async function updateUser(data: {
 	}
 }
 
+// Delete a user by ID
 export async function deleteUser(userId: string) {
 	try {
-		// Supprimer les enregistrements dans UserWorkspace associés à l'utilisateur
 		await prisma.userWorkspace.deleteMany({
 			where: { userId }
 		});
 
-		// Supprimer l'utilisateur
 		await prisma.user.delete({
 			where: { id: userId }
 		});
@@ -115,6 +98,7 @@ export async function deleteUser(userId: string) {
 	}
 }
 
+// Check if the provided workspace IDs exist
 async function checkWorkspacesExist(workspaceIds: string[]): Promise<boolean> {
 	const existingWorkspaces = await prisma.workspace.findMany({
 		where: {

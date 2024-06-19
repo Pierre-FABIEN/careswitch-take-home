@@ -14,6 +14,7 @@
 	import { userCreateSchema, type UserCreateSchema } from '$lib/schemas/users/userCreateSchema';
 	import { userDeleteSchema, type UserDeleteSchema } from '$lib/schemas/users/userDeleteSchema';
 	import { userUpdateSchema, type UserUpdateSchema } from '$lib/schemas/users/userUpdateSchema';
+	import { onMount } from 'svelte';
 
 	export let data: {
 		userCreateform: SuperValidated<Infer<UserCreateSchema>>;
@@ -53,6 +54,10 @@
 	} = updateUserForm;
 
 	const { enhance: deleteUserEnhance, message: deleteUserMessage } = deleteUserForm;
+
+	onMount(() => {
+		console.log(data);
+	});
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
@@ -82,7 +87,7 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{#if data.users && Array.isArray(data.users)}
+				{#if data.users && Array.isArray(data.users) && data.users.length > 0}
 					{#each data.users as user (user.id)}
 						<Table.Row>
 							<Table.Cell>{user.name}</Table.Cell>
@@ -116,16 +121,13 @@
 						</Table.Row>
 					{/each}
 				{:else}
-					<Table.Row>
-						<Table.Cell class="text-center">No users found.</Table.Cell>
-					</Table.Row>
+					<div class="my-5 text-lg font-semibold">No users found.</div>
 				{/if}
 			</Table.Body>
 		</Table.Root>
 	</div>
 </div>
 
-<!-- <MessageSubmit {createUserMessage} {deleteUserMessage} {updateUserMessage} /> -->
 <MessageHandler
 	createMessage={$createUserMessage || ''}
 	deleteMessage={$deleteUserMessage || ''}
