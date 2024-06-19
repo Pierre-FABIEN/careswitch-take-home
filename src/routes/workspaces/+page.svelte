@@ -24,6 +24,7 @@
 	} from '$lib/schemas/workspaces/workspaceUpdateSchema';
 
 	import CreateForm from './CreateForm.svelte';
+	import { onMount } from 'svelte';
 
 	export let data: {
 		workspaceCreateform: SuperValidated<Infer<WorkspaceCreateSchema>>;
@@ -65,6 +66,7 @@
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
 	<div class="mb-4 flex justify-end">
 		<CreateForm
+			{data}
 			{createWorkspaceMessage}
 			{createWorkspaceData}
 			{createWorkspaceEnhance}
@@ -91,6 +93,7 @@
 							</Table.Cell>
 							<Table.Cell>
 								<UpdateForm
+									{data}
 									{workspace}
 									{updateWorkspaceMessage}
 									{updateWorkspaceData}

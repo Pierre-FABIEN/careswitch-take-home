@@ -22,13 +22,13 @@ export const actions: Actions = {
 	create: async ({ request }) => {
 		const formData = await request.formData();
 		const form = await superValidate(formData, zod(userCreateSchema));
-		console.log('formDatawsegswg', formData);
+
 		if (!form.valid) return fail(400, { form });
 
 		try {
 			const userData = {
 				...form.data,
-				workspaces: JSON.parse(formData.get('workspaces') as string) // Getting workspace IDs
+				workspaces: JSON.parse(formData.get('workspaces') as string)
 			};
 
 			await createUser(userData);
@@ -59,7 +59,7 @@ export const actions: Actions = {
 	},
 	update: async ({ request }) => {
 		const formData = await request.formData();
-		console.log('formDatawsegswg', formData);
+
 		const form = await superValidate(formData, zod(userUpdateSchema));
 
 		if (!form.valid) return fail(400, { form });

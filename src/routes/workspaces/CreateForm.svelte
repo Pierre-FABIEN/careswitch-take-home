@@ -1,22 +1,39 @@
 <script lang="ts">
+	import { writable } from 'svelte/store';
+	import { onMount } from 'svelte';
+
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
 	import { Input } from '$ui/input';
 	import { Button } from '$ui/button';
-	import { writable } from 'svelte/store';
+	import { Checkbox } from '$ui/checkbox';
+	import { Label } from '$ui/label';
 
+	export let data: any;
 	export let createWorkspaceMessage: any;
 	export let createWorkspaceData: any;
 	export let createWorkspaceEnhance: any;
 	export let createWorkspaceForm: any;
 
-	// Création du store pour gérer l'état de isSheetOpen
 	const isSheetOpen = writable(false);
 
-	// Réaction au message de création
+	let users: { id: string; name: string; checked: boolean }[] = [];
+
+	onMount(() => {
+		users = data.users.map((user: any) => ({
+			id: user.id,
+			name: user.name,
+			checked: false
+		}));
+	});
+
 	$: if ($createWorkspaceMessage === 'Workspace created successfully') {
 		isSheetOpen.set(false);
 	}
+
+	$: $createWorkspaceData.users = users.filter((user) => user.checked).map((user) => user.id);
+
+	$: hiddenUsersValue = JSON.stringify($createWorkspaceData.users);
 </script>
 
 <Sheet.Root open={$isSheetOpen}>
@@ -42,6 +59,28 @@
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>
+
+			<div>
+				<Form.Field name="users" form={createWorkspaceForm}>
+					<Form.Control let:attrs>
+						<Form.Label>Users</Form.Label>
+						{#each users as user (user.id)}
+							<div class="my-3 flex items-center space-x-2">
+								<Checkbox id={user.id} bind:checked={user.checked} />
+								<Label
+									for={user.id}
+									class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+								>
+									{user.name}
+								</Label>
+							</div>
+						{/each}
+					</Form.Control>
+					<Form.FieldErrors />
+				</Form.Field>
+			</div>
+
+			<input type="hidden" name="users" value={hiddenUsersValue} />
 
 			<Button type="submit" variant="outline">Submit</Button>
 		</form>

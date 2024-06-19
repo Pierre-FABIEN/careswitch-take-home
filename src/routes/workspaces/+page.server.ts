@@ -12,24 +12,32 @@ import {
 	getWorkspaces,
 	updateWorkspace
 } from '$server/workspacesServices';
+import { getUsers } from '$server/usersServices';
 
 export const load: PageServerLoad = async () => {
 	const workspaceCreateform = await superValidate(zod(workspaceCreateSchema));
 	const workspaceDeleteform = await superValidate(zod(workspaceDeleteSchema));
 	const workspaceUpdateform = await superValidate(zod(workspaceUpdateSchema));
 	const workspaces = await getWorkspaces();
-	return { workspaceCreateform, workspaceDeleteform, workspaceUpdateform, workspaces };
+	const users = await getUsers();
+	return { workspaceCreateform, workspaceDeleteform, workspaceUpdateform, workspaces, users };
 };
 
 export const actions: Actions = {
 	create: async ({ request }) => {
 		const formData = await request.formData();
+
 		const form = await superValidate(formData, zod(workspaceCreateSchema));
 
 		if (!form.valid) return fail(400, { form });
 
 		try {
-			await createWorkspace(form.data);
+			const data = {
+				...form.data,
+				users: JSON.parse(formData.get('users') as string) // Getting workspace IDs
+			};
+
+			await createWorkspace(data);
 
 			return message(form, 'Workspace created successfully');
 		} catch (error) {
@@ -56,12 +64,12 @@ export const actions: Actions = {
 	},
 	update: async ({ request }) => {
 		const formData = await request.formData();
-		console.log('formDatawsegswg', formData);
+		console.log(formData);
 
 		const form = await superValidate(formData, zod(workspaceUpdateSchema));
 
 		if (!form.valid) {
-			console.error('Form validation failed:', form); // Log form validation errors
+			console.error('Form validation failed:', form);
 			return fail(400, { form });
 		}
 
@@ -69,11 +77,7 @@ export const actions: Actions = {
 			const data = {
 				id: formData.get('id') as string,
 				name: formData.get('name') as string,
-				email: formData.get('email') as string,
-				integer: parseInt(formData.get('integer') as string, 10), // Convert to integer
-				isAdmin: formData.get('isAdmin') === 'true', // Convert to boolean
-				floatval: parseFloat(formData.get('floatval') as string), // Convert to float
-				birthday: formData.get('birthday') as string
+				users: JSON.parse(formData.get('users') as string)
 			};
 
 			await updateWorkspace(data);

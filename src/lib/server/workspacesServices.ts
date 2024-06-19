@@ -20,10 +20,17 @@ export async function getWorkspaces() {
 	}));
 }
 
-export async function createWorkspace(data: { name: string }) {
+export async function createWorkspace(data: { name: string; users: string[] }) {
 	try {
 		const workspace = await prisma.workspace.create({
-			data
+			data: {
+				name: data.name,
+				users: {
+					create: data.users.map((userId) => ({
+						user: { connect: { id: userId } }
+					}))
+				}
+			}
 		});
 		return workspace;
 	} catch (error) {
@@ -49,12 +56,18 @@ export async function deleteWorkspace(id: string) {
 	}
 }
 
-export async function updateWorkspace(data: { id: string; name: string }) {
+export async function updateWorkspace(data) {
 	try {
 		const workspace = await prisma.workspace.update({
 			where: { id: data.id },
 			data: {
-				name: data.name
+				name: data.name,
+				users: {
+					deleteMany: {}, // Clear existing users
+					create: data.users.map((userId: string) => ({
+						user: { connect: { id: userId } }
+					}))
+				}
 			}
 		});
 
