@@ -7,7 +7,7 @@ export const userCreateSchema = z.object({
 	isAdmin: z.boolean(),
 	floatval: z.number(),
 	birthday: z.string(),
-	workspaces: z.array(z.string()).optional() // Array of workspace IDs
+	workspaces: z.array(z.string()).optional()
 });
 
 export const userUpdateSchema = userCreateSchema.extend({

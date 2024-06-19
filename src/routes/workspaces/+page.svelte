@@ -1,5 +1,13 @@
 <script lang="ts">
 	import { type Infer, type SuperValidated, superForm } from 'sveltekit-superforms';
+
+	import * as Table from '$ui/table';
+	import { Button } from '$ui/button';
+	import TrashIcon from 'svelte-radix/Trash.svelte';
+
+	import UpdateForm from './UpdateForm.svelte';
+	import MessageSubmit from './MessageSubmit.svelte';
+
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
 	import {
@@ -16,15 +24,6 @@
 	} from '$lib/schemas/workspaces/workspaceUpdateSchema';
 
 	import CreateForm from './CreateForm.svelte';
-
-	import * as Table from '$ui/table';
-	import * as Alert from '$ui/alert';
-	import { Button } from '$ui/button';
-	import TrashIcon from 'svelte-radix/Trash.svelte';
-
-	import UpdateForm from './UpdateForm.svelte';
-	import MessageSubmit from './MessageSubmit.svelte';
-	import { onMount } from 'svelte';
 
 	export let data: {
 		workspaceCreateform: SuperValidated<Infer<WorkspaceCreateSchema>>;
@@ -51,19 +50,16 @@
 	const {
 		form: createWorkspaceData,
 		enhance: createWorkspaceEnhance,
-		message: createWorkspaceMessage,
-		validate: createWorkspaceValidate
+		message: createWorkspaceMessage
 	} = createWorkspaceForm;
 
 	const {
 		form: updateWorkspaceData,
 		enhance: updateWorkspaceEnhance,
-		message: updateWorkspaceMessage,
-		validate: updateWorkspaceValidate
+		message: updateWorkspaceMessage
 	} = updateWorkspaceForm;
 
 	const { enhance: deleteWorkspaceEnhance, message: deleteWorkspaceMessage } = deleteWorkspaceForm;
-
 </script>
 
 <div class="mx-auto mt-8 px-4 sm:px-6 lg:px-8">
@@ -71,7 +67,6 @@
 		<CreateForm
 			{createWorkspaceMessage}
 			{createWorkspaceData}
-			{createWorkspaceValidate}
 			{createWorkspaceEnhance}
 			{createWorkspaceForm}
 		/>
@@ -99,7 +94,6 @@
 									{workspace}
 									{updateWorkspaceMessage}
 									{updateWorkspaceData}
-									{updateWorkspaceValidate}
 									{updateWorkspaceEnhance}
 									{updateWorkspaceForm}
 								/>

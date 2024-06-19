@@ -10,7 +10,6 @@
 	export let workspace: any;
 	export let updateWorkspaceMessage: any;
 	export let updateWorkspaceData: any;
-	export let updateWorkspaceValidate: any;
 	export let updateWorkspaceEnhance: any;
 	export let updateWorkspaceForm: any;
 	let isSheetOpen = false;

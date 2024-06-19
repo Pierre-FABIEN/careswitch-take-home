@@ -51,6 +51,7 @@ export const actions: Actions = {
 	},
 	update: async ({ request }) => {
 		const formData = await request.formData();
+		console.log('formDatawsegswg', formData);
 
 		const form = await superValidate(formData, zod(workspaceUpdateSchema));
 

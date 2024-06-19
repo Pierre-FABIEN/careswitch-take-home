@@ -7,6 +7,12 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
+
+		interface Workspace {
+			id: string;
+			name: string;
+			checked?: boolean;
+		}
 	}
 }
 

@@ -7,7 +7,6 @@
 
 	export let createWorkspaceMessage: any;
 	export let createWorkspaceData: any;
-	export let createWorkspaceValidate: any;
 	export let createWorkspaceEnhance: any;
 	export let createWorkspaceForm: any;
 

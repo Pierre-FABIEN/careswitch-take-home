@@ -19,6 +19,7 @@
 		parseDate
 	} from '@internationalized/date';
 	import { onMount } from 'svelte';
+	import type { applyAction } from '$app/forms';
 
 	export let data: any;
 	export let user: any;
@@ -37,8 +38,9 @@
 		isAdmin: false,
 		floatval: 0.0,
 		birthday: '',
-		workspaces: []
+		workspaces: [] as App.Workspace[]
 	});
+
 	$: updateUserData = userData;
 
 	const df = new DateFormatter('en-US', { dateStyle: 'long' });
@@ -85,14 +87,14 @@
 		isSheetOpen = true;
 	};
 
-	// Mettre à jour les workspaces avec seulement les identifiants
-	$: $updateUserData.workspaces = get(userData)
-		.workspaces.filter(({ checked }: { checked: boolean }) => checked)
-		.map(({ id }: { id: string }) => id);
-
 	let hiddenWorkspacesValue: string;
 	$: hiddenWorkspacesValue =
-		'[' + $updateUserData.workspaces.map(({ id }: { id: string }) => `"${id}"`).join(',') + ']';
+		'[' +
+		$updateUserData.workspaces
+			.filter(({ checked }) => checked)
+			.map(({ id }) => `"${id}"`)
+			.join(',') +
+		']';
 
 	// Ajouter un champ caché pour isAdmin
 	let hiddenIsAdminValue: string;
