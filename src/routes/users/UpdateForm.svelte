@@ -28,9 +28,13 @@
 	export let updateUserValidate: any;
 	export let updateUserEnhance: any;
 	export let updateUserForm: any;
+
 	let isSheetOpen = false;
 
-	// Initialisation des données utilisateur avec writable
+	let hiddenWorkspacesValue: string;
+
+	let hiddenIsAdminValue: string;
+
 	const userData = writable({
 		name: '',
 		email: '',
@@ -41,12 +45,9 @@
 		workspaces: [] as App.Workspace[]
 	});
 
-	$: updateUserData = userData;
-
 	const df = new DateFormatter('en-US', { dateStyle: 'long' });
 	let birthdayValue: DateValue | undefined = undefined;
 
-	// Fonction pour mettre à jour les détails de l'utilisateur
 	const updateUserDetails = () => {
 		const userWorkspacesIds = new Set(user.workspaces.map((ws: any) => ws.id));
 		const allWorkspaces = data.workspaces.map((ws: any) => ({
@@ -66,38 +67,34 @@
 		birthdayValue = user.birthday ? parseDate(user.birthday.substring(0, 10)) : undefined;
 	};
 
-	// Initialisation des données utilisateur lors du montage
+	const clickOpenSheet = () => {
+		isSheetOpen = true;
+	};
+
 	onMount(() => {
 		updateUserDetails();
 	});
 
-	// Mise à jour des données utilisateur lorsque le message de mise à jour change
+	$: updateUserData = userData;
+
 	$: if ($updateUserMessage === 'User updated successfully') {
 		isSheetOpen = false;
 		birthdayValue = undefined; // Reset the date value
 		$updateUserData.birthday = ''; // Clear the form data
 	}
 
-	// Mettre à jour les détails de l'utilisateur lorsque l'utilisateur change
 	$: if (user) {
 		updateUserDetails();
 	}
 
-	const clickOpenSheet = () => {
-		isSheetOpen = true;
-	};
-
-	let hiddenWorkspacesValue: string;
 	$: hiddenWorkspacesValue =
 		'[' +
 		$updateUserData.workspaces
-			.filter(({ checked }) => checked)
-			.map(({ id }) => `"${id}"`)
+			.filter(({ checked }: { checked: boolean }) => checked)
+			.map(({ id }: { id: string }) => `"${id}"`)
 			.join(',') +
 		']';
 
-	// Ajouter un champ caché pour isAdmin
-	let hiddenIsAdminValue: string;
 	$: hiddenIsAdminValue = $updateUserData.isAdmin ? 'true' : 'false';
 </script>
 

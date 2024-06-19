@@ -12,7 +12,12 @@
 	export let updateWorkspaceData: any;
 	export let updateWorkspaceEnhance: any;
 	export let updateWorkspaceForm: any;
+
 	let isSheetOpen = false;
+
+	const updateWorkspaceDetails = () => {
+		$updateWorkspaceData.name = workspace.name;
+	};
 
 	const workspaceData = writable({
 		name: '',
@@ -22,31 +27,24 @@
 		floatval: 0.0,
 		birthday: ''
 	});
-	$: updateWorkspaceData = workspaceData;
-
-	// Fonction pour mettre à jour les détails de l'utilisateur
-	const updateWorkspaceDetails = () => {
-		$updateWorkspaceData.name = workspace.name;
-	};
-
-	// Initialisation des données utilisateur lors du montage
-	onMount(() => {
-		updateWorkspaceDetails();
-	});
-
-	// Mise à jour des données utilisateur lorsque le message de mise à jour change
-	$: if ($updateWorkspaceMessage === 'Workspace updated successfully') {
-		isSheetOpen = false;
-	}
-
-	// Mettre à jour les détails de l'utilisateur lorsque l'utilisateur change
-	$: if (workspace) {
-		updateWorkspaceDetails();
-	}
 
 	const clickOpenSheet = () => {
 		isSheetOpen = true;
 	};
+
+	onMount(() => {
+		updateWorkspaceDetails();
+	});
+
+	$: updateWorkspaceData = workspaceData;
+
+	$: if ($updateWorkspaceMessage === 'Workspace updated successfully') {
+		isSheetOpen = false;
+	}
+
+	$: if (workspace) {
+		updateWorkspaceDetails();
+	}
 </script>
 
 <Sheet.Root open={isSheetOpen}>

@@ -17,6 +17,7 @@
 		getLocalTimeZone,
 		parseDate
 	} from '@internationalized/date';
+
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
@@ -27,7 +28,8 @@
 	export let createUserEnhance: any;
 	export let createUserForm: any;
 
-	// Creating a store for isSheetOpen
+	let workspaces: { id: string; name: string; checked: boolean }[] = [];
+
 	const isSheetOpen = writable(false);
 
 	const df = new DateFormatter('en-US', {
@@ -38,12 +40,6 @@
 		? parseDate($createUserData.birthday)
 		: undefined;
 
-	$: if ($createUserMessage === 'User created successfully') {
-		isSheetOpen.set(false);
-		birthdayValue = undefined;
-		$createUserData.birthday = '';
-	}
-
 	onMount(() => {
 		// Initialize workspaces state
 		workspaces = data.workspaces.map((workspace: any) => ({
@@ -53,7 +49,11 @@
 		}));
 	});
 
-	let workspaces: { id: string; name: string; checked: boolean }[] = [];
+	$: if ($createUserMessage === 'User created successfully') {
+		isSheetOpen.set(false);
+		birthdayValue = undefined;
+		$createUserData.birthday = '';
+	}
 
 	$: $createUserData.workspaces = workspaces
 		.filter((workspace) => workspace.checked)
