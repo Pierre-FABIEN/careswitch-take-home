@@ -1,32 +1,28 @@
 <script lang="ts">
-	// Importing necessary components from various UI libraries
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
 	import { Input } from '$ui/input';
 	import * as Card from '$ui/card';
 	import { Switch } from '$ui/switch';
 	import { Button } from '$ui/button';
-	import { Label } from '$lib/components/ui/label';
+	import { Label } from '$ui/label';
 
 	// Importing writable store from Svelte for reactive state management
 	import { getContext } from 'svelte';
 	import { formContext, type FormContextType } from '$lib/context/formContext';
-	import { writable } from 'svelte/store';
-
 	const context = getContext(formContext) as FormContextType;
-
 	const {
 		createWorkspaceForm,
 		createWorkspaceMessage,
 		createWorkspaceForm: { form: createWorkspaceData, enhance: createWorkspaceEnhance }
 	} = context;
 
-	// Props to receive data and functions from parent component or route
-	export let data: any;
-
+	import { writable } from 'svelte/store';
 	// Writable store to manage the state of the sheet (open or closed)
 	const isSheetOpen = writable(false);
 
+	// Props to receive data and functions from parent component or route
+	export let data: any;
 	// Local state for users
 	let users: App.UserWithChecked[] = [];
 

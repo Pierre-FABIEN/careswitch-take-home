@@ -1,3 +1,7 @@
+Pierre FABIEN
+
+Here is the latest version of this project. Thanks to this, I have learned a lot! The objectives are almost achieved. I had difficulties with Zod when updating data and had to disable it for this part. I don't know why it doesn't work. In any case, it would be a great pleasure to evolve in this development environment and perfect my skills!
+
 # Careswitch Take-Home Assignment
 
 Your assignment is to build a simple user management interface using SvelteKit, Prisma, Shadcn, and Tailwind that displays a list of users and supports navigating to individual profiles for viewing and editing. Follow the quickstart guide below to get started and learn more about the requirements.

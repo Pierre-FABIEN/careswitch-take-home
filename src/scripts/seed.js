@@ -2,78 +2,23 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+function generateHexColor() {
+	let color = Math.floor(Math.random() * 16777215).toString(16);
+	return '#' + color.padStart(6, '0'); // S'assurer que la chaîne fait toujours 6 caractères
+}
+
 async function seed() {
 	try {
 		const usersData = [
-			{
-				name: 'Alice',
-				email: 'alice@example.com'
-			},
-			{
-				name: 'Bob',
-				email: 'bob@example.com'
-			},
-			// Ajoutez 13 autres utilisateurs ici
-			{
-				name: 'Charlie',
-				email: 'charlie@example.com'
-			},
-			{
-				name: 'David',
-				email: 'david@example.com'
-			},
-			{
-				name: 'Eve',
-				email: 'eve@example.com'
-			},
-			{
-				name: 'Frank',
-				email: 'frank@example.com'
-			},
-			{
-				name: 'Grace',
-				email: 'grace@example.com'
-			},
-			{
-				name: 'Hank',
-				email: 'hank@example.com'
-			},
-			{
-				name: 'Ivy',
-				email: 'ivy@example.com'
-			},
-			{
-				name: 'Jack',
-				email: 'jack@example.com'
-			},
-			{
-				name: 'Kim',
-				email: 'kim@example.com'
-			},
-			{
-				name: 'Liam',
-				email: 'liam@example.com'
-			},
-			{
-				name: 'Mia',
-				email: 'mia@example.com'
-			},
-			{
-				name: 'Noah',
-				email: 'noah@example.com'
-			},
-			{
-				name: 'Olivia',
-				email: 'olivia@example.com'
-			}
+			{ name: 'Alice', email: 'alice@example.com' },
+			{ name: 'Bob', email: 'bob@example.com' },
+			{ name: 'Charlie', email: 'charlie@example.com' }
 		];
 
 		const workspacesData = [
-			{ name: 'Workspace 1' },
-			{ name: 'Workspace 2' },
-			{ name: 'Workspace 3' },
-			{ name: 'Workspace 4' },
-			{ name: 'Workspace 5' }
+			{ name: '1.Workspace' },
+			{ name: '2.Workspace' },
+			{ name: '3.Workspace' }
 		];
 
 		const usersAndWorkspaces = await prisma.$transaction(async (txn) => {
@@ -87,7 +32,10 @@ async function seed() {
 
 			for (const userData of usersData) {
 				const user = await txn.user.create({
-					data: userData
+					data: {
+						...userData,
+						color: generateHexColor()
+					}
 				});
 				createdUsers.push(user);
 			}
@@ -97,7 +45,10 @@ async function seed() {
 
 			for (const workspaceData of workspacesData) {
 				const workspace = await txn.workspace.create({
-					data: workspaceData
+					data: {
+						...workspaceData,
+						color: generateHexColor()
+					}
 				});
 				createdWorkspaces.push(workspace);
 			}
@@ -116,8 +67,6 @@ async function seed() {
 
 			return { users: createdUsers, workspaces: createdWorkspaces };
 		});
-
-		console.log(`Created users and workspaces: ${JSON.stringify(usersAndWorkspaces)}`);
 	} catch (error) {
 		console.error('Error seeding database:', error);
 	} finally {

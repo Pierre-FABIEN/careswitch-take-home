@@ -1,5 +1,4 @@
 <script lang="ts">
-	// Importing necessary components and utilities from different UI libraries and local files
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
 	import { Input } from '$ui/input';
@@ -10,25 +9,24 @@
 
 	import { formContext, type FormContextType } from '$lib/context/formContext';
 	import { getContext } from 'svelte';
-	import { writable } from 'svelte/store';
-
 	const context = getContext(formContext) as FormContextType;
-
-	// Props to receive data and functions from parent component or route
-	export let data: any;
-	let hiddenWorkspacesValue: string;
-
 	const {
 		createUserForm,
 		createUserMessage,
 		createUserForm: { form: createUserData, enhance: createUserEnhance }
 	} = context;
 
+	import { writable } from 'svelte/store';
+	const isSheetOpen = writable(false);
+
+	// Props to receive data and functions from parent component or route
+	export let data: any;
+
+	let hiddenWorkspacesValue: string;
 	// Local state for workspaces and sheet visibility
 	let workspaces: App.WorkspaceWithChecked[] = [];
 
 	// Writable store to manage the state of the sheet (open or closed)
-	const isSheetOpen = writable(false);
 
 	$: workspaces = data.workspaces.map((workspace: any) => ({
 		id: workspace.id,

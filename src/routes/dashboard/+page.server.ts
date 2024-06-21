@@ -46,7 +46,6 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	createUser: async ({ request }) => {
 		const formData = await request.formData();
-		console.log('osifgusoifus', formData);
 
 		const form = await superValidate(formData, zod(userCreateSchema));
 

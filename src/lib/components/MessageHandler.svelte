@@ -23,7 +23,7 @@
 
 {#if showMessage}
 	<Alert.Root
-		class="fixed bottom-4 right-4 max-w-[200px] border border-green-400 bg-green-500 px-4 py-3 text-white {animationClass}"
+		class="fixed bottom-4 left-4 max-w-[300px] border border-green-400 bg-green-500 px-4 py-3 text-white {animationClass}"
 		role="alert"
 	>
 		<Alert.Description>

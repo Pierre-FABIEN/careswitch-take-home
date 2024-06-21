@@ -1,4 +1,5 @@
 import prisma from './db';
+import { generateHexColor } from './generateHexColor';
 
 // Fetch all users along with their workspaces
 export async function getUsers() {
@@ -33,6 +34,7 @@ export async function createUser(data: App.UserInputData) {
 		const user = await prisma.user.create({
 			data: {
 				...userData,
+				color: generateHexColor(),
 				workspaces: {
 					create:
 						workspaces?.map((workspaceId) => ({

@@ -30,12 +30,7 @@
 	export let workspace: App.Workspace;
 
 	// Local state to manage the visibility of the sheet
-	let isSheetOpen = false;
-
-	// Function to open the sheet
-	const clickOpenSheet = () => {
-		isSheetOpen = true;
-	};
+	const isSheetOpen = writable(false);
 
 	// Writable store to manage workspace data reactively
 	const workspaceData = writable({
@@ -67,7 +62,7 @@
 
 	// Reactive statement to handle successful workspace update message
 	$: if ($updateWorkspaceMessage === 'Workspace updated successfully') {
-		isSheetOpen = false; // Close the sheet
+		isSheetOpen.set(false); // Close the sheet
 	}
 
 	// Reactive statement to update workspace details when the workspace prop changes
@@ -84,9 +79,14 @@
 	);
 </script>
 
-<Sheet.Root open={isSheetOpen}>
+<Sheet.Root open={$isSheetOpen}>
 	<Sheet.Trigger asChild let:builder>
-		<Button builders={[builder]} variant="outline" on:click={clickOpenSheet} class="p-1 text-xs">
+		<Button
+			builders={[builder]}
+			variant="outline"
+			class="ml-0 p-1 text-xs"
+			on:click={() => isSheetOpen.set(true)}
+		>
 			<PencilIcon class="h-4 w-8" />
 		</Button>
 	</Sheet.Trigger>

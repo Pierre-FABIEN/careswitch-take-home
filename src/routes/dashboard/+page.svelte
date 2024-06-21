@@ -7,9 +7,6 @@
 	import type { FormContextType } from '$lib/context/formContext';
 
 	import MessageHandler from '$components/MessageHandler.svelte';
-	import * as Table from '$ui/table';
-	import { Button } from '$ui/button';
-	import TrashIcon from 'svelte-radix/Trash.svelte';
 
 	import type {
 		UserCreateSchema,
@@ -104,15 +101,14 @@
 	} = contextData;
 </script>
 
-<div class="m-5 grid grid-cols-4 gap-4">
-	<div class="col-span-2">
+<div class="m-5 grid grid-cols-1 gap-4 md:grid-cols-4">
+	<div class="col-span-1 md:col-span-2">
 		<CardUser {data} />
 	</div>
-	<div class="col-span-2">
+	<div class="col-span-1 md:col-span-2">
 		<CardWorkspace {data} />
 	</div>
 </div>
-
 <MessageHandler
 	createMessage={$createWorkspaceMessage || $createUserMessage || ''}
 	deleteMessage={$deleteWorkspaceMessage || $deleteUserMessage || ''}

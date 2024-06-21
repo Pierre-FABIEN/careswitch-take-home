@@ -1,5 +1,4 @@
 <script lang="ts">
-	// Importing necessary Svelte store and components from various UI libraries and local files
 	import { writable } from 'svelte/store';
 	import * as Form from '$ui/form';
 	import * as Sheet from '$ui/sheet';
@@ -11,24 +10,22 @@
 
 	import PencilIcon from 'svelte-radix/Pencil1.svelte';
 
-	// Importing Svelte lifecycle function to run code when the component is mounted
-	import { onMount } from 'svelte';
-
 	import { getContext } from 'svelte';
 	import { formContext, type FormContextType } from '$lib/context/formContext';
 	const context = getContext(formContext) as FormContextType;
-
-	export let user;
-	export let data: any;
-
 	const {
 		updateUserForm,
 		updateUserMessage,
 		updateUserForm: { enhance: updateUserEnhance }
 	} = context;
 
-	// Local state to manage the visibility of the sheet
-	let isSheetOpen = false;
+	export let user;
+	export let data: any;
+
+	// Importing Svelte lifecycle function to run code when the component is mounted
+	import { onMount } from 'svelte';
+	// Writable store to manage the state of the sheet (open or closed)
+	const isSheetOpen = writable(false);
 
 	// Local state variables for hidden input values
 	let hiddenWorkspacesValue: string;
@@ -58,11 +55,6 @@
 		});
 	};
 
-	// Function to open the sheet
-	const clickOpenSheet = () => {
-		isSheetOpen = true;
-	};
-
 	// On component mount, update user details
 	onMount(() => {
 		updateUserDetails();
@@ -70,7 +62,7 @@
 
 	// Reactive statement to handle successful user update message
 	$: if ($updateUserMessage === 'User updated successfully') {
-		isSheetOpen = false; // Close the sheet
+		isSheetOpen.set(false); // Close the sheet
 	}
 
 	// Reactive statement to update user details when the user prop changes
@@ -86,9 +78,14 @@
 	);
 </script>
 
-<Sheet.Root open={isSheetOpen}>
+<Sheet.Root open={$isSheetOpen}>
 	<Sheet.Trigger asChild let:builder>
-		<Button builders={[builder]} variant="outline" on:click={clickOpenSheet} class="p-1 text-xs">
+		<Button
+			builders={[builder]}
+			variant="outline"
+			on:click={() => isSheetOpen.set(true)}
+			class="p-1 text-xs"
+		>
 			<PencilIcon class="h-4 w-8" />
 		</Button>
 	</Sheet.Trigger>

@@ -12,12 +12,14 @@ model User {
   name       String
   email      String
   workspaces UserWorkspace[]
+  color      String          @default("#FFFFFF")
 }
 
 model Workspace {
   id    String          @id @default(cuid())
   name  String
   users UserWorkspace[]
+  color String          @default("#FFFFFF")
 }
 
 model UserWorkspace {

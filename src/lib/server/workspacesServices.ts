@@ -1,4 +1,5 @@
 import prisma from './db';
+import { generateHexColor } from './generateHexColor';
 
 // Fetch all workspaces along with their users
 export async function getWorkspaces() {
@@ -16,7 +17,8 @@ export async function getWorkspaces() {
 		...workspace,
 		users: workspace.users.map((userWorkspace) => ({
 			id: userWorkspace.user.id,
-			name: userWorkspace.user.name
+			name: userWorkspace.user.name,
+			color: userWorkspace.user.color
 		}))
 	}));
 }
@@ -27,6 +29,7 @@ export async function createWorkspace(data: App.WorkspaceInputData) {
 		const workspace = await prisma.workspace.create({
 			data: {
 				name: data.name,
+				color: generateHexColor(),
 				users: {
 					create: data.users.map((userId) => ({
 						user: { connect: { id: userId } }

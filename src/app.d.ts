@@ -12,15 +12,16 @@ declare global {
 			id: string;
 			name: string;
 			email: string;
+			color: string;
 			workspaces: Workspace[];
 		}
 
 		interface Workspace {
 			id: string;
 			name: string;
+			color: string;
 			users: User[];
 		}
-
 		interface UserInputData {
 			name: string;
 			email: string;
