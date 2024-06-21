@@ -12,27 +12,19 @@ declare global {
 			id: string;
 			name: string;
 			email: string;
-			integer: number;
-			isAdmin: boolean;
-			floatval: number;
-			birthday: string;
 			workspaces: Workspace[];
-		}
-
-		interface UserInputData {
-			name: string;
-			email: string;
-			integer: number;
-			isAdmin: boolean;
-			floatval: number;
-			birthday: string;
-			workspaces?: string[];
 		}
 
 		interface Workspace {
 			id: string;
 			name: string;
 			users: User[];
+		}
+
+		interface UserInputData {
+			name: string;
+			email: string;
+			workspaces: string[];
 		}
 
 		interface WorkspaceInputData {
@@ -46,39 +38,15 @@ declare global {
 			checked: boolean;
 		}
 
-		interface USerWithChecked {
+		interface UserWithChecked {
 			id: string;
 			name: string;
 			checked: boolean;
 		}
 
-		interface UserWorkspace {
-			userId: string;
-			workspaceId: string;
-		}
-
 		interface UserCreateSchema {
 			name: string;
 			email: string;
-			integer: number;
-			isAdmin: boolean;
-			floatval: number;
-			birthday: string;
-			workspaces: string[];
-		}
-
-		interface UserDeleteSchema {
-			id: string;
-		}
-
-		interface UserUpdateSchema {
-			id: string;
-			name: string;
-			email: string;
-			integer: number;
-			isAdmin: boolean;
-			floatval: number;
-			birthday: string;
 			workspaces: string[];
 		}
 
@@ -87,8 +55,11 @@ declare global {
 			users: string[];
 		}
 
-		interface WorkspaceDeleteSchema {
+		interface UserUpdateSchema {
 			id: string;
+			name: string;
+			email: string;
+			workspaces: string[];
 		}
 
 		interface WorkspaceUpdateSchema {

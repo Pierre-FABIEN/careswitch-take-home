@@ -6,6 +6,7 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$server: 'src/lib/server',
+			$stores: 'src/lib/stores',
 			$components: 'src/lib/components',
 			$lib: 'src/lib',
 			$ui: 'src/lib/components/ui'

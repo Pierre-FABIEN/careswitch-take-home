@@ -7,124 +7,64 @@ async function seed() {
 		const usersData = [
 			{
 				name: 'Alice',
-				email: 'alice@example.com',
-				integer: 25,
-				isAdmin: true,
-				floatval: 100.5,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'alice@example.com'
 			},
 			{
 				name: 'Bob',
-				email: 'bob@example.com',
-				integer: 30,
-				isAdmin: false,
-				floatval: 200.75,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'bob@example.com'
 			},
 			// Ajoutez 13 autres utilisateurs ici
 			{
 				name: 'Charlie',
-				email: 'charlie@example.com',
-				integer: 28,
-				isAdmin: false,
-				floatval: 150.25,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'charlie@example.com'
 			},
 			{
 				name: 'David',
-				email: 'david@example.com',
-				integer: 35,
-				isAdmin: false,
-				floatval: 300.4,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'david@example.com'
 			},
 			{
 				name: 'Eve',
-				email: 'eve@example.com',
-				integer: 22,
-				isAdmin: true,
-				floatval: 120.75,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'eve@example.com'
 			},
 			{
 				name: 'Frank',
-				email: 'frank@example.com',
-				integer: 40,
-				isAdmin: false,
-				floatval: 350.5,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'frank@example.com'
 			},
 			{
 				name: 'Grace',
-				email: 'grace@example.com',
-				integer: 32,
-				isAdmin: true,
-				floatval: 400.65,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'grace@example.com'
 			},
 			{
 				name: 'Hank',
-				email: 'hank@example.com',
-				integer: 29,
-				isAdmin: false,
-				floatval: 250.8,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'hank@example.com'
 			},
 			{
 				name: 'Ivy',
-				email: 'ivy@example.com',
-				integer: 26,
-				isAdmin: false,
-				floatval: 130.95,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'ivy@example.com'
 			},
 			{
 				name: 'Jack',
-				email: 'jack@example.com',
-				integer: 38,
-				isAdmin: true,
-				floatval: 500.1,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'jack@example.com'
 			},
 			{
 				name: 'Kim',
-				email: 'kim@example.com',
-				integer: 27,
-				isAdmin: false,
-				floatval: 220.25,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'kim@example.com'
 			},
 			{
 				name: 'Liam',
-				email: 'liam@example.com',
-				integer: 24,
-				isAdmin: false,
-				floatval: 330.4,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'liam@example.com'
 			},
 			{
 				name: 'Mia',
-				email: 'mia@example.com',
-				integer: 31,
-				isAdmin: true,
-				floatval: 140.55,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'mia@example.com'
 			},
 			{
 				name: 'Noah',
-				email: 'noah@example.com',
-				integer: 36,
-				isAdmin: false,
-				floatval: 410.7,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'noah@example.com'
 			},
 			{
 				name: 'Olivia',
-				email: 'olivia@example.com',
-				integer: 33,
-				isAdmin: true,
-				floatval: 160.85,
-				birthday: '1995-12-17T01:00:00+01:00'
+				email: 'olivia@example.com'
 			}
 		];
 

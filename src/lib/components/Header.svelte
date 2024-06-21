@@ -8,44 +8,8 @@
 	>
 		<LogoCareSwitch />
 		<a href="/" class="text-muted-foreground transition-colors hover:text-foreground"> Home </a>
-		<a href="/users" class="text-muted-foreground transition-colors hover:text-foreground">
-			Users
-		</a>
-		<a href="/workspaces" class="text-muted-foreground transition-colors hover:text-foreground">
-			Workspaces
+		<a href="/dashboard" class="text-muted-foreground transition-colors hover:text-foreground">
+			Dashboard
 		</a>
 	</nav>
 </header>
-<!-- <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { Menubar, MenubarMenu, MenubarTrigger } from '$ui/menubar';
-	import { page } from '$app/stores';
-	import { get } from 'svelte/store';
-
-	$: currentPage = $page.url.pathname;
-
-	$: console.log(currentPage);
-
-	if (currentPage === '/') {
-		console.log('mlkmlk');
-	}
-
-	const isActive = (path: string) => currentPage === path;
-</script>
-
-<div class="mt-8 flex justify-center px-4 sm:px-6">
-	<Menubar>
-		<MenubarMenu>
-			<MenubarTrigger on:click={() => goto('/')} data-state={isActive('/') ? 'open' : ''}
-				>Home</MenubarTrigger
-			>
-			<MenubarTrigger on:click={() => goto('/users')} data-state={isActive('/users') ? 'open' : ''}
-				>Users</MenubarTrigger
-			>
-			<MenubarTrigger
-				on:click={() => goto('/workspaces')}
-				data-state={isActive('/workspaces') ? 'open' : ''}>Workspaces</MenubarTrigger
-			>
-		</MenubarMenu>
-	</Menubar>
-</div> -->
